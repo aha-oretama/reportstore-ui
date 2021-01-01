@@ -1,14 +1,17 @@
 import Layout from '../../components/layout';
-import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import utilStyles from '../../styles/utils.module.css';
-import { getAllTestIds, getTestData } from '../../lib/tests';
+import { useTestData } from '../../hooks/useTestData';
+import { useRouter } from 'next/router';
 
-export default function Post({
-  testData,
-}: {
-  testData: ReturnType<typeof getTestData>;
-}) {
+export default function Post() {
+  const router = useRouter();
+  const { id } = router.query;
+  const { testData, isLoading, isError } = useTestData(id as string);
+
+  if (isError) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
+
   return (
     <Layout>
       <Head>
@@ -50,20 +53,3 @@ export default function Post({
     </Layout>
   );
 }
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getAllTestIds();
-  return {
-    paths,
-    fallback: false,
-  };
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const testData = await getTestData(params.id);
-  return {
-    props: {
-      testData,
-    },
-  };
-};

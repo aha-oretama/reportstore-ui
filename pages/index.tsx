@@ -1,15 +1,15 @@
 import Head from 'next/head';
 import Layout, { siteTitle } from '../components/layout';
 import utilStyles from '../styles/utils.module.css';
-import { GetStaticProps } from 'next';
 import Link from 'next/link';
-import { getSortedTestsData } from '../lib/tests';
+import { useIds } from '../hooks/useIds';
 
-export default function Home({
-  testsData,
-}: {
-  testsData: ReturnType<typeof getSortedTestsData>;
-}) {
+export default function Home() {
+  const { testsData, isError, isLoading } = useIds();
+
+  if (isError) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
+
   return (
     <Layout home>
       <Head>
@@ -27,7 +27,7 @@ export default function Home({
         <ul className={utilStyles.list}>
           {testsData.map(({ id, time }) => (
             <li className={utilStyles.listItem} key={id}>
-              <Link href={`/posts/${id}`}>
+              <Link href={`/tests/${id}`}>
                 <a>{id}</a>
               </Link>
               <br />
@@ -39,12 +39,3 @@ export default function Home({
     </Layout>
   );
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-  const testsData = getSortedTestsData();
-  return {
-    props: {
-      testsData,
-    },
-  };
-};
