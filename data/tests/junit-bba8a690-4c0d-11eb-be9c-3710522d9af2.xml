@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="3" failures="1" errors="0" time="11.432">
+  <testsuite name="date.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-01-01T08:45:34" time="7.002" tests="1">
+    <testcase classname=" Date component should return formatted date" name=" Date component should return formatted date" time="0.109">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests.test.ts" errors="0" failures="1" skipped="0" timestamp="2021-01-01T08:45:34" time="8.36" tests="2">
+    <testcase classname=" getSortedTestsData should return id and testsuites. testsuite and testcase should be array" name=" getSortedTestsData should return id and testsuites. testsuite and testcase should be array" time="0.016">
+      <failure>Error: This is error
+    at Object.&lt;anonymous&gt; (/Users/sekineyasufumi/IdeaProjects/practice-nextjs/test/lib/tests.test.ts:5:9)
+    at Object.asyncJestTest (/Users/sekineyasufumi/IdeaProjects/practice-nextjs/node_modules/jest-jasmine2/build/jasmineAsyncInstall.js:106:37)
+    at /Users/sekineyasufumi/IdeaProjects/practice-nextjs/node_modules/jest-jasmine2/build/queueRunner.js:45:12
+    at new Promise (&lt;anonymous&gt;)
+    at mapper (/Users/sekineyasufumi/IdeaProjects/practice-nextjs/node_modules/jest-jasmine2/build/queueRunner.js:28:19)
+    at /Users/sekineyasufumi/IdeaProjects/practice-nextjs/node_modules/jest-jasmine2/build/queueRunner.js:75:41
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)</failure>
+    </testcase>
+    <testcase classname=" getAllTestIds should return ids" name=" getAllTestIds should return ids" time="0.003">
+    </testcase>
+  </testsuite>
+</testsuites>

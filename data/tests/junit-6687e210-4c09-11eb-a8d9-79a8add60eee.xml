@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="3" failures="0" errors="0" time="23.396">
+  <testsuite name="tests.test.ts" errors="0" failures="0" skipped="0" timestamp="2021-01-01T08:14:22" time="14.55" tests="2">
+    <testcase classname=" getSortedTestsData should return id and testsuites" name=" getSortedTestsData should return id and testsuites" time="0.034">
+    </testcase>
+    <testcase classname=" getAllTestIds should return ids" name=" getAllTestIds should return ids" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="date.test.tsx" errors="0" failures="0" skipped="0" timestamp="2021-01-01T08:14:22" time="19.398" tests="1">
+    <testcase classname=" Date component should return formatted date" name=" Date component should return formatted date" time="0.062">
+    </testcase>
+  </testsuite>
+</testsuites>
