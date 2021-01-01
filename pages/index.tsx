@@ -1,12 +1,14 @@
-import Head from 'next/head'
-import Layout, { siteTitle } from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
-import {GetStaticProps} from "next";
-import Link from "next/link";
-import {getSortedTestsData} from "../lib/tests";
+import Head from 'next/head';
+import Layout, { siteTitle } from '../components/layout';
+import utilStyles from '../styles/utils.module.css';
+import { GetStaticProps } from 'next';
+import Link from 'next/link';
+import { getSortedTestsData } from '../lib/tests';
 
-export default function Home({allPostsData}: {
-  allPostsData: ReturnType<typeof getSortedTestsData>
+export default function Home({
+  allPostsData,
+}: {
+  allPostsData: ReturnType<typeof getSortedTestsData>;
 }) {
   return (
     <Layout home>
@@ -26,25 +28,23 @@ export default function Home({allPostsData}: {
           {allPostsData.map(({ id, time, testsuites }) => (
             <li className={utilStyles.listItem} key={id}>
               <Link href={`/posts/${id}`}>
-                <a>{testsuites["@_name"]}</a>
+                <a>{testsuites['@_name']}</a>
               </Link>
               <br />
-              <small className={utilStyles.lightText}>
-                {time}
-              </small>
+              <small className={utilStyles.lightText}>{time}</small>
             </li>
           ))}
         </ul>
       </section>
     </Layout>
-  )
+  );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = getSortedTestsData();
   return {
     props: {
-      allPostsData
-    }
-  }
-}
+      allPostsData,
+    },
+  };
+};
