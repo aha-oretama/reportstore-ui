@@ -35,9 +35,9 @@ export function getSortedTestsData() {
   const allPostsData = fileNames.map((fileName) => {
     const id = fileName.replace(/^junit-/, '').replace(/\.xml$/, '');
 
-    const fullPath = path.join(testsDirectory, fileName);
-    const time = fs.statSync(fullPath).mtime.getTime();
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const filePath = path.join(testsDirectory, fileName);
+    const time = fs.statSync(filePath).mtime.getTime();
+    const fileContents = fs.readFileSync(filePath, 'utf8');
     const content = Parser.parse(fileContents, { ignoreAttributes: false });
 
     return {
@@ -65,4 +65,17 @@ export const getAllTestIds = () => {
       },
     };
   });
+};
+
+export const getTestData = (id) => {
+  const filePath = path.join(testsDirectory, `junit-${id}.xml`);
+  const fileContents = fs.readFileSync(filePath, 'utf8');
+  const time = fs.statSync(filePath).mtime.getTime();
+  const content = Parser.parse(fileContents, { ignoreAttributes: false });
+
+  return {
+    id,
+    time,
+    ...(content as JunitContent),
+  };
 };
