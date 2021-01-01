@@ -7,7 +7,9 @@ module.exports = {
     '^.+\\.(ts|tsx)$': 'babel-jest',
   },
   setupFilesAfterEnv: ["./jest.setup.ts"],
-  reporters: ["default", "jest-junit"],
+  reporters: ["default", [
+    "jest-junit", {uniqueOutputName: "true", suiteNameTemplate: "{filename}", outputDirectory: '<rootDir>/data/tests'}
+  ]],
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
