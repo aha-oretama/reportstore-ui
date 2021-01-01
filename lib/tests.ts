@@ -4,6 +4,25 @@ import Parser from 'fast-xml-parser';
 
 const testsDirectory = path.join(process.cwd(), 'data', 'tests');
 
+interface JunitTestcase {
+  '@_classname': string;
+  '@_name': string;
+  '@_time': string;
+  failure?: string;
+  skipped?: '';
+}
+
+interface JunitTestsuite {
+  '@_name': string;
+  '@_errors': string;
+  '@_failures': string;
+  '@_skipped': string;
+  '@_timestamp': string;
+  '@_time': string;
+  '@_tests': string;
+  testcase: JunitTestcase[];
+}
+
 interface JunitContent {
   testsuites: {
     '@_name': string;
@@ -11,22 +30,7 @@ interface JunitContent {
     '@_failures': string;
     '@_errors': string;
     '@_time': string;
-    testsuite: [
-      {
-        '@_name': string;
-        '@_errors': string;
-        '@_failures': string;
-        '@_skipped': string;
-        '@_timestamp': string;
-        '@_time': string;
-        '@_tests': string;
-        testcase: {
-          '@_classname': string;
-          '@_name': string;
-          '@_tests': string;
-        };
-      }
-    ];
+    testsuite: JunitTestsuite[];
   };
 }
 
@@ -37,13 +41,10 @@ export function getSortedTestsData() {
 
     const filePath = path.join(testsDirectory, fileName);
     const time = fs.statSync(filePath).mtime.getTime();
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    const content = Parser.parse(fileContents, { ignoreAttributes: false });
 
     return {
       id,
       time,
-      ...(content as JunitContent),
     };
   });
   // Sort by date in descending order
@@ -76,6 +77,18 @@ export const getTestData = (id) => {
   return {
     id,
     time,
-    ...(content as JunitContent),
+    ...formatJunitContent(content),
   };
+};
+
+const formatJunitContent = (content: any): JunitContent => {
+  const tmpSuite = content.testsuites.testsuite;
+  const testsuite = Array.isArray(tmpSuite) ? tmpSuite : [tmpSuite];
+  // testcase should always return array
+  testsuite.forEach((s) => {
+    s.testcase = Array.isArray(s.testcase) ? s.testcase : [s.testcase];
+  });
+  // testsuite should always return array
+  content.testsuites.testsuite = testsuite;
+  return content;
 };

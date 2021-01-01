@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { getSortedTestsData } from '../lib/tests';
 
 export default function Home({
-  allPostsData,
+  testsData,
 }: {
-  allPostsData: ReturnType<typeof getSortedTestsData>;
+  testsData: ReturnType<typeof getSortedTestsData>;
 }) {
   return (
     <Layout home>
@@ -25,10 +25,10 @@ export default function Home({
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, time, testsuites }) => (
+          {testsData.map(({ id, time }) => (
             <li className={utilStyles.listItem} key={id}>
               <Link href={`/posts/${id}`}>
-                <a>{testsuites['@_name']}</a>
+                <a>{id}</a>
               </Link>
               <br />
               <small className={utilStyles.lightText}>{time}</small>
@@ -41,10 +41,10 @@ export default function Home({
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const allPostsData = getSortedTestsData();
+  const testsData = getSortedTestsData();
   return {
     props: {
-      allPostsData,
+      testsData,
     },
   };
 };

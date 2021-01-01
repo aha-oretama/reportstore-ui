@@ -15,8 +15,38 @@ export default function Post({
         <title>{testData.id}</title>
       </Head>
       <h1 className={utilStyles.headingXl}>{testData.id}</h1>
+      <h2 className={utilStyles.headingXl}>{testData.testsuites['@_name']}</h2>
       <div className={utilStyles.lightText}>{testData.time}</div>
-      {testData.testsuites['@_name']}
+      <ul>
+        {testData.testsuites.testsuite.map((suite) => (
+          <li key={suite['@_name']}>
+            {suite['@_name']}
+            <div className={utilStyles.lightText}>{suite['@_timestamp']}</div>
+            <br />
+            tests: {suite['@_tests']}
+            <br />
+            errors: {suite['@_errors']}
+            <br />
+            failures: {suite['@_failures']}
+            <br />
+            skipped: {suite['@_skipped']}
+            <br />
+            time: {suite['@_time']}
+            <br />
+            <ul>
+              {suite.testcase.map((tcase) => (
+                <li key={tcase['@_name']}>
+                  {tcase['@_classname']} {tcase['@_name']}
+                  <div className={utilStyles.lightText}>{tcase['@_time']}</div>
+                  <br />
+                  {tcase.failure ? `failure ${tcase.failure}` : null}
+                  {tcase.skipped ? `skipped ${tcase.skipped}` : null}
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
     </Layout>
   );
 }
