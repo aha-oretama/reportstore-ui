@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require("../lib/upload")();
+require('../lib/upload')();
