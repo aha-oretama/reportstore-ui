@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import Parser from 'fast-xml-parser';
+import { v4 } from 'uuid';
 
 const testsDirectory = path.join(process.cwd(), 'data', 'tests');
 
@@ -79,6 +80,14 @@ export const getTestData = (id) => {
     time,
     ...formatJunitContent(content),
   };
+};
+
+export const storeTestData = (content: string) => {
+  const id = v4();
+  fs.writeFileSync(
+    path.join(testsDirectory, `junit-${id}.xml`),
+    Buffer.from(content)
+  );
 };
 
 const formatJunitContent = (content: any): JunitContent => {

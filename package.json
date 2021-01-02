@@ -11,6 +11,9 @@
     "build": "next build",
     "start": "next start"
   },
+  "bin": {
+    "cli": "bin/cli.js"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
@@ -24,12 +27,16 @@
     ]
   },
   "dependencies": {
+    "@types/uuid": "^8.3.0",
+    "bent": "^7.3.12",
+    "commander": "^6.2.1",
     "date-fns": "^2.16.1",
     "fast-xml-parser": "^3.17.6",
     "next": "^10.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "swr": "^0.3.11"
+    "swr": "^0.3.11",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.8",
