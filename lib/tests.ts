@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import Parser from 'fast-xml-parser';
-import { v4 } from 'uuid';
+import db from '../models';
 
 const testsDirectory = path.join(process.cwd(), 'data', 'tests');
 
@@ -15,12 +15,12 @@ interface JunitTestcase {
 
 interface JunitTestsuite {
   '@_name': string;
-  '@_errors': string;
-  '@_failures': string;
-  '@_skipped': string;
-  '@_timestamp': string;
-  '@_time': string;
   '@_tests': string;
+  '@_failures': string;
+  '@_errors': string;
+  '@_skipped': string;
+  '@_time': string;
+  '@_timestamp': string;
   testcase: JunitTestcase[];
 }
 
@@ -82,12 +82,17 @@ export const getTestData = (id) => {
   };
 };
 
-export const storeTestData = (content: string) => {
-  const id = v4();
-  fs.writeFileSync(
-    path.join(testsDirectory, `junit-${id}.xml`),
-    Buffer.from(content)
-  );
+export const storeTestData = (rawContent: string) => {
+  const content = Parser.parse(rawContent, { ignoreAttributes: false });
+  const { testsuites } = formatJunitContent(content);
+
+  db.report.create({
+    name: testsuites['@_name'],
+    tests: Number(testsuites['@_tests']),
+    failures: Number(testsuites['@_failures']),
+    errors: Number(testsuites['@_errors']),
+    time: Number(testsuites['@_time']),
+  });
 };
 
 const formatJunitContent = (content: any): JunitContent => {
