@@ -2,6 +2,7 @@ module.exports = {
   test: process.env.DATABASE_URL
     ? {
         use_env_variable: 'DATABASE_URL',
+        logging: false,
       }
     : {
         username: null,
@@ -9,6 +10,7 @@ module.exports = {
         database: null,
         host: 'localhost',
         port: '5432',
+        logging: false,
         dialect: 'postgres',
       },
   development: {
