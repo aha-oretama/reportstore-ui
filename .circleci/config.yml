@@ -22,6 +22,7 @@ jobs:
       - image: circleci/postgres:13-postgis-ram
         environment:
           POSTGRES_USER: root
+          POSTGRES_HOST_AUTH_METHOD: trust
     steps:
       - checkout
       - run: npm ci
