@@ -29,6 +29,10 @@ jobs:
           command: npm run test
           environment:
             DATABASE_URL: postgres://root:$POSTGRES_PASSWORD@127.0.0.1:5432/reportstore_test
+      - run:
+          name: upload test
+          command: node bin/cli.js -u https://restore.vercel.app/ test-results/jest/junit.xml
+          when: always
       - store_test_results:
           path: test-results
 
