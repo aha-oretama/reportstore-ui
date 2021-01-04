@@ -13,22 +13,22 @@ jobs:
       - run:
           name: type-check
           command: npm run type-check
-      - run:
-          name: type-check
-          command: npm run type-check
   test:
     docker:
       - image: cimg/node:14.15.3
-        environment:
-          DATABASE_URL: postgres://root:$POSTGRES_PASSWORD@127.0.0.1:5432/reportstore_test
       - image: circleci/postgres:13-postgis-ram
         environment:
           POSTGRES_DB: reportstore_test
           POSTGRES_USER: root
+          POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     steps:
       - checkout
       - run: npm ci
-      - run: npm run test
+      - run:
+          name: test
+          command: npm run test
+          environment:
+            DATABASE_URL: postgres://root:$POSTGRES_PASSWORD@127.0.0.1:5432/reportstore_test
 
 workflows:
   version: 2
