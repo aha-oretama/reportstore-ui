@@ -1,0 +1,40 @@
+version: 2.1
+
+jobs:
+  lint:
+    docker:
+      - image: cimg/node:14.15.3
+    steps:
+      - checkout
+      - run: npm ci
+      - run:
+          name: lint
+          command: npm run lint
+      - run:
+          name: type-check
+          command: npm run type-check
+  test:
+    docker:
+      - image: cimg/node:14.15.3
+      - image: circleci/postgres:13-postgis-ram
+        environment:
+          POSTGRES_DB: reportstore_test
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    steps:
+      - checkout
+      - run: npm ci
+      - run:
+          name: test
+          command: npm run test
+          environment:
+            DATABASE_URL: postgres://root:$POSTGRES_PASSWORD@127.0.0.1:5432/reportstore_test
+      - store_test_results:
+          path: test-results
+
+workflows:
+  version: 2
+  checks:
+    jobs:
+      - lint
+      - test
