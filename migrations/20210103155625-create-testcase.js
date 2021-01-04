@@ -28,11 +28,11 @@ module.exports = {
       },
       failure: {
         allowNull: true,
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       skipped: {
         allowNull: true,
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       time: {
         allowNull: false,

@@ -82,17 +82,44 @@ export const getTestData = (id) => {
   };
 };
 
-export const storeTestData = (rawContent: string) => {
+export const storeTestData = async (rawContent: string) => {
   const content = Parser.parse(rawContent, { ignoreAttributes: false });
   const { testsuites } = formatJunitContent(content);
 
-  db.report.create({
+  const report = await db.report.create({
     name: testsuites['@_name'],
     tests: Number(testsuites['@_tests']),
     failures: Number(testsuites['@_failures']),
     errors: Number(testsuites['@_errors']),
     time: Number(testsuites['@_time']),
   });
+  await Promise.all(
+    testsuites.testsuite.map(async (suite) => {
+      const suiteRecord = await db.suite.create({
+        report_id: report.id,
+        name: suite['@_name'],
+        tests: Number(suite['@_tests']),
+        failures: Number(suite['@_failures']),
+        errors: Number(suite['@_errors']),
+        skipped: Number(suite['@_skipped']),
+        time: Number(suite['@_time']),
+        timestamp: suite['@_timestamp'].replace(/T/, ' '),
+      });
+      await Promise.all(
+        suite.testcase.map(
+          async (test) =>
+            await db.testcase.create({
+              suite_id: suiteRecord.id,
+              classname: test['@_classname'],
+              name: test['@_name'],
+              failure: test.failure,
+              skipped: test.skipped,
+              time: Number(test['@_time']),
+            })
+        )
+      );
+    })
+  );
 };
 
 const formatJunitContent = (content: any): JunitContent => {
