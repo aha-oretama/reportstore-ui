@@ -35,26 +35,9 @@ interface JunitContent {
   };
 }
 
-export function getSortedTestsData() {
-  const fileNames = fs.readdirSync(testsDirectory);
-  const allPostsData = fileNames.map((fileName) => {
-    const id = fileName.replace(/^junit-/, '').replace(/\.xml$/, '');
-
-    const filePath = path.join(testsDirectory, fileName);
-    const time = fs.statSync(filePath).mtime.getTime();
-
-    return {
-      id,
-      time,
-    };
-  });
-  // Sort by date in descending order
-  return allPostsData.sort((a, b) => {
-    if (a.time < b.time) {
-      return 1;
-    } else {
-      return -1;
-    }
+export async function getSortedTestsData() {
+  return await db.report.findAll({
+    order: [['id', 'DESC']],
   });
 }
 
@@ -69,17 +52,17 @@ export const getAllTestIds = () => {
   });
 };
 
-export const getTestData = (id) => {
-  const filePath = path.join(testsDirectory, `junit-${id}.xml`);
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  const time = fs.statSync(filePath).mtime.getTime();
-  const content = Parser.parse(fileContents, { ignoreAttributes: false });
-
-  return {
-    id,
-    time,
-    ...formatJunitContent(content),
-  };
+export const getTestData = async (id) => {
+  return await db.report.findByPk(id, {
+    include: [
+      {
+        model: db.suite,
+        include: {
+          model: db.testcase,
+        },
+      },
+    ],
+  });
 };
 
 export const storeTestData = async (rawContent: string) => {

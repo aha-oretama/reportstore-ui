@@ -1,12 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTestData } from '../../../lib/tests';
 
-export default (
-  req: NextApiRequest,
-  res: NextApiResponse<ReturnType<typeof getTestData>>
-) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {
     query: { id },
   } = req;
-  res.status(200).json(getTestData(id));
+  const testData = await getTestData(id);
+  res.status(200).json(testData);
 };

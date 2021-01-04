@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSortedTestsData } from '../../lib/tests';
 
-export default (
-  req: NextApiRequest,
-  res: NextApiResponse<ReturnType<typeof getSortedTestsData>>
-) => {
-  res.status(200).json(getSortedTestsData());
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const testsData = await getSortedTestsData();
+  res.status(200).json(testsData);
 };

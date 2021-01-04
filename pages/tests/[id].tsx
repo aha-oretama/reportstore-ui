@@ -18,32 +18,32 @@ export default function Post() {
         <title>{testData.id}</title>
       </Head>
       <h1 className={utilStyles.headingXl}>{testData.id}</h1>
-      <h2 className={utilStyles.headingXl}>{testData.testsuites['@_name']}</h2>
+      <h2 className={utilStyles.headingXl}>{testData.name}</h2>
       <div className={utilStyles.lightText}>{testData.time}</div>
       <ul>
-        {testData.testsuites.testsuite.map((suite) => (
-          <li key={suite['@_name']}>
-            {suite['@_name']}
-            <div className={utilStyles.lightText}>{suite['@_timestamp']}</div>
+        {testData.suites.map((suite) => (
+          <li key={suite.name}>
+            {suite.name}
+            <div className={utilStyles.lightText}>{suite.timestamp}</div>
             <br />
-            tests: {suite['@_tests']}
+            tests: {suite.tests}
             <br />
-            errors: {suite['@_errors']}
+            errors: {suite.errors}
             <br />
-            failures: {suite['@_failures']}
+            failures: {suite.failures}
             <br />
-            skipped: {suite['@_skipped']}
+            skipped: {suite.skipped}
             <br />
-            time: {suite['@_time']}
+            time: {suite.time}
             <br />
             <ul>
-              {suite.testcase.map((tcase) => (
-                <li key={tcase['@_name']}>
-                  {tcase['@_classname']} {tcase['@_name']}
-                  <div className={utilStyles.lightText}>{tcase['@_time']}</div>
+              {suite.testcases.map((testcase) => (
+                <li key={testcase.name}>
+                  {testcase.classname} {testcase.name}
+                  <div className={utilStyles.lightText}>{testcase.time}</div>
                   <br />
-                  {tcase.failure ? `failure ${tcase.failure}` : null}
-                  {tcase.skipped ? `skipped ${tcase.skipped}` : null}
+                  {testcase.failure ? `failure ${testcase.failure}` : null}
+                  {testcase.skipped ? `skipped ${testcase.skipped}` : null}
                 </li>
               ))}
             </ul>
