@@ -5,6 +5,7 @@ jobs:
     docker:
       - image: cimg/node:14.15.3
     steps:
+      - checkout
       - run: npm ci
       - run:
           name: lint
@@ -19,7 +20,10 @@ jobs:
     docker:
       - image: cimg/node:14.15.3
       - image: circleci/postgres:13-postgis-ram
+        environment:
+          POSTGRES_USER: root
     steps:
+      - checkout
       - run: npm ci
       - run: npm run test
 
