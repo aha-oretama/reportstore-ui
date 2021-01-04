@@ -6,6 +6,7 @@
     "lint": "eslint . --ext ts --ext tsx --ext js",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write .",
+    "pretest": "sequelize db:migrate:undo:all --env test; sequelize db:migrate --env test",
     "test": "jest",
     "dev": "next dev",
     "build": "next build",
@@ -41,6 +42,7 @@
     "swr": "^0.3.11"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.12.11",
     "@testing-library/jest-dom": "^5.11.8",
     "@testing-library/react": "^11.2.2",
     "@types/jest": "^26.0.19",

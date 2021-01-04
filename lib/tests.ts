@@ -1,9 +1,5 @@
-import fs from 'fs';
-import path from 'path';
 import Parser from 'fast-xml-parser';
 import db from '../models';
-
-const testsDirectory = path.join(process.cwd(), 'data', 'tests');
 
 interface JunitTestcase {
   '@_classname': string;
@@ -40,17 +36,6 @@ export async function getSortedTestsData() {
     order: [['id', 'DESC']],
   });
 }
-
-export const getAllTestIds = () => {
-  const fileNames = fs.readdirSync(testsDirectory);
-  return fileNames.map((fileName) => {
-    return {
-      params: {
-        id: fileName.replace(/^junit-/, '').replace(/\.xml$/, ''),
-      },
-    };
-  });
-};
 
 export const getTestData = async (id) => {
   return await db.report.findByPk(id, {

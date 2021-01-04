@@ -1,26 +1,44 @@
 import {
-  getAllTestIds,
   getSortedTestsData,
   getTestData,
+  storeTestData,
 } from '../../lib/tests';
+import fs from 'fs';
+import path from 'path';
+import db from '../../models';
 
-it('getSortedTestsData should return id and time. ', () => {
-  const tests = getSortedTestsData();
-  expect(tests.length).toBeGreaterThan(0);
-  expect(tests[0].time > tests[1].time).toBeTruthy();
+const dataDir = path.join(__dirname, '..', 'data');
+const files = ['junit-pass.xml', 'junit-fail.xml', 'junit-fail-skip.xml'];
+
+beforeAll(async () => {
+  // To fix the order, don't use Promise.all
+  for (const file of files) {
+    const fileContent = fs.readFileSync(path.join(dataDir, file), 'utf8');
+    await storeTestData(fileContent);
+  }
 });
 
-it('getAllTestIds should return ids', () => {
-  const ids = getAllTestIds();
-  expect(ids.length).toBeGreaterThan(0);
-  expect(ids[0].params.id).toMatch(
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+it('getSortedTestsData returns three data, and sorted by id desc', async () => {
+  const testsData = await getSortedTestsData();
+  expect(testsData).toHaveLength(3);
+  expect(testsData[0].id).toBeGreaterThan(testsData[1].id);
+  expect(testsData[1].id).toBeGreaterThan(testsData[2].id);
+});
+
+it('getTestData returns the specific data', async () => {
+  const testsData = await getSortedTestsData();
+  const passData = await getTestData(testsData[2].id); // first data should be junit-pass.xml
+  expect(passData.name).toBe('jest tests');
+  expect(passData.time).toBe(9.681);
+  expect(passData.suites[0].name).toBe('post.test.ts');
+  expect(passData.suites[0].testcases[0].name).toBe(
+    'getAllPostIds should return ids'
   );
 });
 
-it('getTestData should return testsuiretes. testsuite and testcase should be array', () => {
-  const testData = getTestData('d7cf3960-4c0d-11eb-82e9-35e1a462a88a');
-  expect(testData.testsuites['@_name']).toBeDefined();
-  expect(Array.isArray(testData.testsuites.testsuite)).toBeTruthy();
-  expect(Array.isArray(testData.testsuites.testsuite[0].testcase)).toBeTruthy();
+afterAll(async () => {
+  await db.report.destroy({
+    truncate: { cascade: true },
+  });
+  db.sequelize.close();
 });
