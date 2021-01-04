@@ -6,49 +6,49 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       suite_id: {
         allowNull: false,
         references: {
-          model: "suites",
-          key: "id"
+          model: 'suites',
+          key: 'id',
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       classname: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       failure: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       skipped: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       time: {
         allowNull: false,
-        type: Sequelize.REAL
+        type: Sequelize.REAL,
       },
       created_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updated_at: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface) => {
     await queryInterface.dropTable('testcases');
-  }
+  },
 };

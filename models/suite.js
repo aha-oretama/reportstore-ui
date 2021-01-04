@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Suite extends Model {
@@ -16,19 +14,22 @@ module.exports = (sequelize, DataTypes) => {
     // }
   }
 
-  Suite.init({
-    report_id: DataTypes.INTEGER,
-    name: DataTypes.STRING,
-    tests: DataTypes.INTEGER,
-    failures: DataTypes.INTEGER,
-    errors: DataTypes.INTEGER,
-    skipped: DataTypes.INTEGER,
-    time: DataTypes.REAL,
-    timestamp: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'suite',
-    underscored: true,
-  });
+  Suite.init(
+    {
+      report_id: DataTypes.INTEGER,
+      name: DataTypes.STRING,
+      tests: DataTypes.INTEGER,
+      failures: DataTypes.INTEGER,
+      errors: DataTypes.INTEGER,
+      skipped: DataTypes.INTEGER,
+      time: DataTypes.REAL,
+      timestamp: DataTypes.DATE,
+    },
+    {
+      sequelize,
+      modelName: 'suite',
+      underscored: true,
+    }
+  );
   return Suite;
 };
