@@ -25,15 +25,30 @@ export default function Home() {
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
-          {testsData.map(({ id, time }) => (
-            <li className={utilStyles.listItem} key={id}>
-              <Link href={`/tests/${id}`}>
-                <a>{id}</a>
-              </Link>
-              <br />
-              <small className={utilStyles.lightText}>{time}</small>
-            </li>
-          ))}
+          {testsData.map(
+            ({
+              id,
+              time,
+              build: { repository_url, branch, commit_hash, build_url },
+            }) => (
+              <li className={utilStyles.listItem} key={id}>
+                <Link href={`/tests/${id}`}>
+                  <a>{id}</a>
+                </Link>
+                <br />
+                <small className={utilStyles.lightText}>{time}</small>
+                <br />
+                <a href={repository_url}>{repository_url}</a>
+                <br />
+                {branch}
+                <br />
+                {commit_hash}
+                <br />
+                {build_url}
+                <br />
+              </li>
+            )
+          )}
         </ul>
       </section>
     </Layout>

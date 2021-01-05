@@ -1,5 +1,6 @@
 import Parser from 'fast-xml-parser';
 import db from '../models';
+import fs from 'fs';
 
 interface JunitTestcase {
   '@_classname': string;
@@ -31,8 +32,23 @@ interface JunitContent {
   };
 }
 
+export interface BuildInfo {
+  reportId: number;
+  repositoryUrl: string;
+  branch: string;
+  commitHash: string;
+  tag?: string;
+  pullRequestUrl?: string; // TODO: might be better to accept multiple urls, process.env.CIRCLE_PULL_REQUESTS.split(','),
+  buildUrl: string;
+}
+
 export async function getSortedTestsData() {
   return await db.report.findAll({
+    include: [
+      {
+        model: db.build,
+      },
+    ],
     order: [['id', 'DESC']],
   });
 }
@@ -50,7 +66,20 @@ export const getTestData = async (id) => {
   });
 };
 
-export const storeTestData = async (rawContent: string) => {
+export const storeBuildInfo = async (build: BuildInfo) => {
+  return await db.build.create({
+    report_id: build.reportId,
+    repository_url: build.repositoryUrl,
+    branch: build.branch,
+    commit_hash: build.commitHash,
+    tag: build.tag,
+    pull_request_url: build.pullRequestUrl,
+    build_url: build.buildUrl,
+  });
+};
+
+export const storeTestData = async (filePath: string) => {
+  const rawContent = fs.readFileSync(filePath, { encoding: 'utf-8' });
   const content = Parser.parse(rawContent, { ignoreAttributes: false });
   const { testsuites } = formatJunitContent(content);
 
@@ -88,6 +117,8 @@ export const storeTestData = async (rawContent: string) => {
       );
     })
   );
+
+  return report;
 };
 
 const formatJunitContent = (content: any): JunitContent => {

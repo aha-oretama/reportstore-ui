@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Report.hasMany(models.suite);
+      Report.hasOne(models.build);
     }
   }
 
