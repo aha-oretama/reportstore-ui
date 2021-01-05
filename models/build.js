@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Build.init(
     {
+      report_id: DataTypes.INTEGER,
       repository_url: DataTypes.STRING,
       branch: DataTypes.STRING,
       commit_hash: DataTypes.STRING,

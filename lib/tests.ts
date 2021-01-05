@@ -33,6 +33,7 @@ interface JunitContent {
 }
 
 export interface BuildInfo {
+  reportId: number;
   repositoryUrl: string;
   branch: string;
   commitHash: string;
@@ -43,6 +44,11 @@ export interface BuildInfo {
 
 export async function getSortedTestsData() {
   return await db.report.findAll({
+    include: [
+      {
+        model: db.build,
+      },
+    ],
     order: [['id', 'DESC']],
   });
 }
@@ -62,6 +68,7 @@ export const getTestData = async (id) => {
 
 export const storeBuildInfo = async (build: BuildInfo) => {
   return await db.build.create({
+    report_id: build.reportId,
     repository_url: build.repositoryUrl,
     branch: build.branch,
     commit_hash: build.commitHash,

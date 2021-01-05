@@ -35,8 +35,9 @@ async function getBody(req: NextApiRequest): Promise<ResolveData> {
   });
 }
 
-const getBuildInfo = (fields: Fields) => {
+const getBuildInfo = (reportId: number, fields: Fields) => {
   return {
+    reportId,
     repositoryUrl: fields['repositoryUrl'],
     branch: fields['branch'],
     commitHash: fields['commitHash'],
@@ -50,12 +51,12 @@ export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   if (req.method === 'POST') {
     const body = await getBody(req);
 
-    await storeBuildInfo(getBuildInfo(body.fields));
     // files returns array when multiples is true, but never enable it
     const path = Array.isArray(body.files.file)
       ? body.files.file[0].path
       : body.files.file.path;
-    await storeTestData(path);
+    const report = await storeTestData(path);
+    await storeBuildInfo(getBuildInfo(report.id, body.fields));
     res.status(200).json({ result: 'uploaded' });
   } else {
     res.status(400).json({ result: 'not found' });
