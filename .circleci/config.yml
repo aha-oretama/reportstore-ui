@@ -18,7 +18,7 @@ jobs:
       - image: cimg/node:14.15.3
       - image: circleci/postgres:13-postgis-ram
         environment:
-          POSTGRES_DB: reportstore_test
+          POSTGRES_DB: testerve_test
           POSTGRES_USER: root
           POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     steps:
@@ -28,7 +28,7 @@ jobs:
           name: test
           command: npm run test
           environment:
-            DATABASE_URL: postgres://root:$POSTGRES_PASSWORD@127.0.0.1:5432/reportstore_test
+            DATABASE_URL: postgres://root:$POSTGRES_PASSWORD@127.0.0.1:5432/testerve_test
       - run:
           name: upload test
           command: node bin/cli.js -u https://restore.vercel.app/ test-results/jest/junit.xml
