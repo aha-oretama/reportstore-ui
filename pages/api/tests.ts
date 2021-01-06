@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Fields, Files, IncomingForm } from 'formidable';
 import { BuildInfo, storeBuildInfo, storeTestData } from '../../lib/tests';
+import { Form } from 'multiparty';
 
 interface Response {
   result: string;
@@ -14,19 +14,14 @@ export const config = {
 };
 
 interface ResolveData {
-  fields: Fields;
-  files: Files;
+  fields: any;
+  files: any;
 }
 
 async function getBody(req: NextApiRequest): Promise<ResolveData> {
-  const form = new IncomingForm();
-  form.keepExtensions = true;
-  // vercel is running in lambda in aws, cannot access os.tmpdir
-  if (process.env.AWS_REGION) {
-    form.uploadDir = '/tmp';
-  }
+  const form = new Form();
   return await new Promise<ResolveData>((resolve, reject) => {
-    form.parse(req, (err, fields: Fields, files: Files) => {
+    form.parse(req, (err, fields, files) => {
       if (err) {
         reject(err);
         return;
@@ -39,15 +34,22 @@ async function getBody(req: NextApiRequest): Promise<ResolveData> {
   });
 }
 
-const getBuildInfo = (reportId: number, fields: Fields) => {
+const getBuildInfo = (reportId: number, fields: any) => {
+  const [repositoryUrl] = fields['repositoryUrl'];
+  const [branch] = fields['branch'];
+  const [commitHash] = fields['commitHash'];
+  const [tag] = fields['tag'] || [];
+  const [pullRequestUrl] = fields['pullRequestUrl'] || [];
+  const [buildUrl] = fields['buildUrl'];
+
   return {
     reportId,
-    repositoryUrl: fields['repositoryUrl'],
-    branch: fields['branch'],
-    commitHash: fields['commitHash'],
-    tag: fields['tag'],
-    pullRequestUrl: fields['pullRequestUrl'],
-    buildUrl: fields['buildUrl'],
+    repositoryUrl,
+    branch,
+    commitHash,
+    tag,
+    pullRequestUrl,
+    buildUrl,
   } as BuildInfo;
 };
 
