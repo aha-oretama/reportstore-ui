@@ -19,7 +19,7 @@ interface ResolveData {
 }
 
 async function getBody(req: NextApiRequest): Promise<ResolveData> {
-  const form = new Form();
+  const form = new Form({encoding: 'utf-8'});
   return await new Promise<ResolveData>((resolve, reject) => {
     form.parse(req, (err, fields, files) => {
       if (err) {
@@ -54,6 +54,8 @@ const getBuildInfo = (reportId: number, fields: any) => {
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
+  req.on('data', (c) => console.log(c));
+  req.on('end', () => console.log('ended'));
   if (req.method === 'POST') {
     const body = await getBody(req);
 
