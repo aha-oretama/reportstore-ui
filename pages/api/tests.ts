@@ -21,6 +21,10 @@ interface ResolveData {
 async function getBody(req: NextApiRequest): Promise<ResolveData> {
   const form = new IncomingForm();
   form.keepExtensions = true;
+  // vercel is running in lambda in aws, cannot access os.tmpdir
+  if (process.env.AWS_REGION) {
+    form.uploadDir = '/tmp';
+  }
   return await new Promise<ResolveData>((resolve, reject) => {
     form.parse(req, (err, fields: Fields, files: Files) => {
       if (err) {
