@@ -56,6 +56,7 @@ const getBuildInfo = (reportId: number, fields: any) => {
 export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   req.on('data', (c) => console.log(c));
   req.on('end', () => console.log('ended'));
+  req.setEncoding('utf-8');
   if (req.method === 'POST') {
     const body = await getBody(req);
 
