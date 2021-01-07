@@ -1,6 +1,5 @@
 import Parser from 'fast-xml-parser';
 import db from '../models';
-import fs from 'fs';
 
 interface JunitTestcase {
   '@_classname': string;
@@ -78,8 +77,7 @@ export const storeBuildInfo = async (build: BuildInfo) => {
   });
 };
 
-export const storeTestData = async (filePath: string) => {
-  const rawContent = fs.readFileSync(filePath, { encoding: 'utf-8' });
+export const storeTestData = async (rawContent: string) => {
   const content = Parser.parse(rawContent, { ignoreAttributes: false });
   const { testsuites } = formatJunitContent(content);
 
