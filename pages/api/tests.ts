@@ -24,6 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
     // Using headers is workaround
     // Vercel is running in lambda in AWS.
     // When posting FormData with file upload, server api always failed in parsing the body.
+    // Related discussion, https://github.com/vercel/next.js/discussions/11634#discussioncomment-143941
     const report = await storeTestData(req.body);
     await storeBuildInfo(getBuildInfo(report.id, req.headers));
     res.status(200).json({ result: 'uploaded' });
