@@ -1,62 +1,32 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Fields, Files, IncomingForm } from 'formidable';
 import { BuildInfo, storeBuildInfo, storeTestData } from '../../lib/tests';
+import { IncomingHttpHeaders } from 'http';
 
 interface Response {
   result: string;
 }
 
-// To parse form-data by formidable, https://stackoverflow.com/questions/60020241/next-js-file-upload-via-api-routes-formidable-not-working
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-interface ResolveData {
-  fields: Fields;
-  files: Files;
-}
-
-async function getBody(req: NextApiRequest): Promise<ResolveData> {
-  const form = new IncomingForm();
-  form.keepExtensions = true;
-  return await new Promise<ResolveData>((resolve, reject) => {
-    form.parse(req, (err, fields: Fields, files: Files) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve({
-        fields,
-        files,
-      });
-    });
-  });
-}
-
-const getBuildInfo = (reportId: number, fields: Fields) => {
+const getBuildInfo = (reportId: number, headers: IncomingHttpHeaders) => {
   return {
     reportId,
-    repositoryUrl: fields['repositoryUrl'],
-    branch: fields['branch'],
-    commitHash: fields['commitHash'],
-    tag: fields['tag'],
-    pullRequestUrl: fields['pullRequestUrl'],
-    buildUrl: fields['buildUrl'],
+    repositoryUrl: headers['x-repository-url'],
+    branch: headers['x-branch'],
+    commitHash: headers['x-commit-hash'],
+    tag: headers['x-tag'],
+    pullRequestUrl: headers['x-pull-request-url'],
+    buildUrl: headers['x-build-rl'],
   } as BuildInfo;
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   if (req.method === 'POST') {
-    const body = await getBody(req);
-
-    // files returns array when multiples is true, but never enable it
-    const path = Array.isArray(body.files.file)
-      ? body.files.file[0].path
-      : body.files.file.path;
-    const report = await storeTestData(path);
-    await storeBuildInfo(getBuildInfo(report.id, body.fields));
+    // TODO: Expected codes are https://github.com/aha-oretama/testerve-ui/blob/f64acb5219af0bba7e136ccd633917dc2139c504/pages/api/tests.ts#L10-L59
+    // Using headers is workaround
+    // Vercel is running in lambda in AWS.
+    // When posting FormData with file upload, server api always failed in parsing the body.
+    // Related discussion, https://github.com/vercel/next.js/discussions/11634#discussioncomment-143941
+    const report = await storeTestData(req.body);
+    await storeBuildInfo(getBuildInfo(report.id, req.headers));
     res.status(200).json({ result: 'uploaded' });
   } else {
     res.status(400).json({ result: 'not found' });
