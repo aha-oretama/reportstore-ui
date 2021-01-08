@@ -3,10 +3,11 @@
 set -e
 
 env="$1"
-if [[ "$env" = "test" ]]; then
+if [ -n "$DATABASE_URL" ]; then
+  url="$DATABASE_URL"
+elif [ "$env" = "test" ]; then
   url="postgresql://postgres:testpassword@localhost:5433/testerve_test"
-fi
-if [[ "$env" = "development" ]]; then
+elif [ "$env" = "development" ]; then
   url="postgresql://postgres:devpassword@localhost:5432/testerve_dev"
 fi
 
