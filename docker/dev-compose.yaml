@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13-alpine
+    container_name: dev-db-container
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=devpassword
+      - POSTGRES_DB=testerve_dev
+    volumes:
+      - $PWD/docker/data:/var/lib/postgresql/data
