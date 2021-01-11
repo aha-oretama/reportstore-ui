@@ -1,23 +1,45 @@
-import styles from './layout.module.css';
 import React from 'react';
+import Link from 'next/link';
+import { useUser } from '../hooks/useUser';
 
-export default function Header() {
+export const Header: React.FunctionComponent = () => {
+  const { user, loading } = useUser();
+
   return (
-    <header className={styles.header}>
-      {/*{isAuthenticated ? (*/}
-      {/*  <>*/}
-      {/*    <img*/}
-      {/*      src="/images/profile.jpg"*/}
-      {/*      className={`${styles.headerHomeImage} ${utilStyles.borderCircle}`}*/}
-      {/*      alt={user.name}*/}
-      {/*    />*/}
-      {/*    <h1 className={utilStyles.heading2Xl}>{user.name}</h1>*/}
-      {/*  </>*/}
-      {/*) : (*/}
-      <>
-        <a href="/api/login">Login</a>
-      </>
-      {/*)}*/}
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <Link href="/">
+              <a>Home</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/about">
+              <a>About</a>
+            </Link>
+          </li>
+          {!loading &&
+            (user ? (
+              <>
+                <li>
+                  <Link href="/profile">
+                    <a>{user.name}</a>
+                  </Link>
+                </li>{' '}
+                <li>
+                  <a href="/api/logout">Logout</a>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <a href="/api/login">Login</a>
+                </li>
+              </>
+            ))}
+        </ul>
+      </nav>
     </header>
   );
-}
+};

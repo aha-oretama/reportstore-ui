@@ -4,7 +4,8 @@ export default initAuth0({
   domain: 'dev--testserve.us.auth0.com',
   clientId: 'xf1GiXttwUiS8q5v8EEKLbReIkQqL65F',
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
-  scope: 'openid profile',
+  audience: 'https://api.github.com/',
+  scope: 'openid profile read:user',
   redirectUri: 'http://localhost:3000/api/callback',
   postLogoutRedirectUri: 'http://localhost:3000/',
   session: {
