@@ -16,7 +16,7 @@ export default function Layout({
   children: React.ReactNode;
   home?: boolean;
   user?: any;
-  loading: boolean;
+  loading?: boolean;
 }) {
   return (
     <UserProvider value={{ user, loading }}>
