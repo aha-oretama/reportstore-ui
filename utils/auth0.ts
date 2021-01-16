@@ -1,21 +1,27 @@
 import { initAuth0 } from '@auth0/nextjs-auth0';
 import { AuthenticationClient, ManagementClient } from 'auth0';
+import IAuth0Settings from "@auth0/nextjs-auth0/dist/settings";
 
-const dataAuth0 = {
+// Vercel's url doesn't include protocol
+const getBaseUrl = () => {
+  if(process.env.PUBLIC_URL.startsWith("http")) {
+    return process.env.PUBLIC_URL
+  }
+  return `https://${process.env.PUBLIC_URL}`;
+}
+const baseUrl = getBaseUrl();
+
+const auth0Config: IAuth0Settings = {
   domain: 'dev--testserve.us.auth0.com',
   clientId: '5bfuWDcCVQcXnEgP3BmYoKie0iqCTkxn',
-  clientSecret: process.env.AUTH0_CLIENT_SECRET,
-};
-
-export default initAuth0({
-  ...dataAuth0,
+  clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
   audience: 'https://api.github.com',
   scope: 'openid profile repo',
-  redirectUri: 'http://localhost:3000/api/callback',
-  postLogoutRedirectUri: 'http://localhost:3000/',
+  redirectUri: `${baseUrl}/api/callback`,
+  postLogoutRedirectUri: `${baseUrl}/`,
   session: {
     // The secret used to encrypt the cookie.
-    cookieSecret: '9obqJtSf27Z6h4VRZN539pKGRlP7mux1',
+    cookieSecret: process.env.AUTH_SESSION_COOKIE_SECRET as string,
     // The cookie lifetime (expiration) in seconds. Set to 8 hours by default.
     cookieLifetime: 60 * 60 * 8,
     // (Optional) The cookie domain this should run on. Leave it blank to restrict it to your domain.
@@ -35,7 +41,9 @@ export default initAuth0({
     // (Optional) Configure the clock tolerance in milliseconds, if the time on your server is running behind.
     clockTolerance: 10000,
   },
-});
+};
+
+export default initAuth0(auth0Config);
 
 export const getIdpToken = async (userId: string) => {
   const client = await getManagementClient();
@@ -49,13 +57,13 @@ const getManagementClient = async () => {
     return managementClient;
   }
 
-  const authenticationClient = new AuthenticationClient(dataAuth0);
+  const authenticationClient = new AuthenticationClient(auth0Config);
   const tokenResponse = await authenticationClient.clientCredentialsGrant({
-    audience: `https://${dataAuth0.domain}/api/v2/`,
+    audience: `https://${auth0Config.domain}/api/v2/`,
     scope: 'read:users read:user_idp_tokens',
   });
   managementClient = new ManagementClient({
-    domain: dataAuth0.domain,
+    domain: auth0Config.domain,
     token: tokenResponse.access_token,
   });
   return managementClient;
