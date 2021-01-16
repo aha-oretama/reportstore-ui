@@ -18,7 +18,7 @@ interface UserContext {
 }
 
 // Use a global to save the user, so we don't have to fetch it again after page navigations
-let userState;
+let userState: UserProfile | undefined;
 const User = React.createContext<UserContext>({ user: null, loading: false });
 
 export const fetchUser = async (): Promise<UserProfile> => {
