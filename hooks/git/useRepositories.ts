@@ -1,13 +1,13 @@
 import useSWR from 'swr';
 import fetcher from '../fetcher';
 
-export const useOrganizations = (userId: string) => {
+export const useRepositories = (userId: string) => {
   const { data, error } = useSWR(
-    `/api/git/organizations?userId=${userId}`,
+    `/api/git/repositories?userId=${userId}`,
     fetcher
   );
   return {
-    orgs: data,
+    repositories: data,
     isLoading: !error && !data,
     isError: error,
   };

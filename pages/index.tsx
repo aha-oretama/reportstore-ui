@@ -4,13 +4,11 @@ import utilStyles from '../styles/utils.module.css';
 import Link from 'next/link';
 import { useIds } from '../hooks/useIds';
 import { useFetchUser } from '../hooks/useUser';
-import { OrganizationLayout } from '../components/organization-layout';
+import { RepositoryList } from '../components/repository-list';
 
 export default function Home() {
   const { testsData, isError, isLoading } = useIds();
   const { user, loading } = useFetchUser();
-
-  console.log(user);
 
   if (isError) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
@@ -27,7 +25,7 @@ export default function Home() {
             (This is a sample website - you’ll be building a site like this on{' '}
             <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
           </p>
-          <OrganizationLayout user={user} />
+          <RepositoryList user={user} />
         </section>
       ) : null}
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>

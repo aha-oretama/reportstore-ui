@@ -10,7 +10,7 @@ const dataAuth0 = {
 export default initAuth0({
   ...dataAuth0,
   audience: 'https://api.github.com',
-  scope: 'openid profile read:user',
+  scope: 'openid profile repo',
   redirectUri: 'http://localhost:3000/api/callback',
   postLogoutRedirectUri: 'http://localhost:3000/',
   session: {
