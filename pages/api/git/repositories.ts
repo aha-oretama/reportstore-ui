@@ -16,7 +16,7 @@ export default async function repositories(
       auth: idpToken,
     });
 
-    const octokitRes = await octokit.repos.listForAuthenticatedUser();;
+    const octokitRes = await octokit.repos.listForAuthenticatedUser();
     res.status(200).json(octokitRes.data);
   } catch (error) {
     console.error(error);
