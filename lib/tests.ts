@@ -43,28 +43,24 @@ export interface BuildInfo {
 
 export async function getSortedTestsData() {
   return await db.report.findAll({
-    include: [
-      {
-        model: db.build,
-      },
-    ],
+    include: db.report.associations.build,
     order: [['id', 'DESC']],
   });
 }
 
-// TODO: remove ts-ignore
 export const getTestData = async (id) => {
-  // @ts-ignore
   return await db.report.findByPk(id, {
+    rejectOnEmpty: true,
     include: [
       {
-        model: db.suite,
-        include: {
-          // @ts-ignore
-          model: db.testcase,
-        },
-      },
-    ],
+        association: db.report.associations.suites,
+        include: [
+          {
+            association: db.suite.associations.testcases,
+          }
+        ]
+      }
+    ]
   });
 };
 
@@ -101,7 +97,7 @@ export const storeTestData = async (rawContent: string) => {
         errors: Number(suite['@_errors']),
         skipped: Number(suite['@_skipped']),
         time: Number(suite['@_time']),
-        timestamp: suite['@_timestamp'].replace(/T/, ' '),
+        timestamp: new Date(suite['@_timestamp']),
       });
       await Promise.all(
         suite.testcase.map(

@@ -1,6 +1,6 @@
 import {Association, Model, Optional, Sequelize} from "sequelize";
 
-export interface ReportAttribute {
+interface ReportAttribute {
   id: number
   name: string,
   tests: number,
@@ -24,23 +24,103 @@ export class Report extends Model<ReportAttribute, ReportCreationAttributes>
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  public readonly suites?: any[]
-  public readonly build?: any
-    // Report.hasMany(models.suite);
-    // Report.hasOne(models.build);
-
+  public readonly suites?: Suite[]
+  public readonly build?: Build
   public static associations: {
-    suites: Association<Report, any>;
+    suites: Association<Report, Suite>;
+    build: Association<Report, Build>;
   };
+}
+
+interface SuiteAttribute {
+  id: number
+  report_id: number,
+  name: string,
+  tests: number,
+  failures: number,
+  errors: number,
+  skipped: number,
+  time: number,
+  timestamp: Date,
+}
+interface SuiteCreationAttributes extends Optional<SuiteAttribute, "id"> {}
+
+export class Suite extends Model<SuiteAttribute, SuiteCreationAttributes> implements SuiteAttribute {
+  id: number;
+  report_id: number;
+  name: string;
+  tests: number;
+  failures: number;
+  errors: number;
+  skipped: number;
+  time: number;
+  timestamp: Date;
+  // timestamps!
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+
+  public readonly testcases?: TestCase[]
+  public static associations: {
+    testcases: Association<Suite, TestCase>;
+  };
+}
+
+interface TestCaseAttribute {
+  id: number,
+  suite_id: number,
+  classname: string,
+  name: string,
+  failure: string | null,
+  skipped: string | null,
+  time: number,
+}
+interface TestCaseCreationAttributes extends Optional<TestCaseAttribute, "id"> {}
+
+export class TestCase extends Model<TestCaseAttribute, TestCaseCreationAttributes> implements TestCaseAttribute {
+  classname: string;
+  failure: string | null;
+  id: number;
+  name: string;
+  skipped: string | null;
+  suite_id: number;
+  time: number;
+  // timestamps!
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+interface BuildAttribute {
+  id: number,
+  report_id: number,
+  repository_url: string,
+  branch: string,
+  commit_hash: string,
+  tag: string,
+  pull_request_url: string,
+  build_url: string,
+}
+interface BuildCreationAttributes extends Optional<BuildAttribute, "id"> {}
+
+export class Build extends Model<BuildAttribute, BuildCreationAttributes> implements BuildAttribute {
+  branch: string;
+  build_url: string;
+  commit_hash: string;
+  id: number;
+  pull_request_url: string;
+  report_id: number;
+  repository_url: string;
+  tag: string;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 interface DBModel {
   sequelize: InstanceType<Sequelize>;
   Sequelize: typeof Sequelize;
   report: typeof Report;
-  build: any
-  suite: any
-  testcase: any;
+  suite: typeof Suite;
+  testcase: typeof TestCase;
+  build: typeof Build;
 }
 
 declare const db: DBModel;
