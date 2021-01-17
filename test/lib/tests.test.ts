@@ -74,7 +74,8 @@ describe('TestData', () => {
 
 afterAll(async () => {
   await db.report.destroy({
-    truncate: { cascade: true },
+    truncate: true,
+    cascade: true,
   });
   db.sequelize.close();
 });

@@ -52,12 +52,15 @@ export async function getSortedTestsData() {
   });
 }
 
+// TODO: remove ts-ignore
 export const getTestData = async (id) => {
+  // @ts-ignore
   return await db.report.findByPk(id, {
     include: [
       {
         model: db.suite,
         include: {
+          // @ts-ignore
           model: db.testcase,
         },
       },
