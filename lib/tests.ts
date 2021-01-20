@@ -1,5 +1,6 @@
 import Parser from 'fast-xml-parser';
 import db from '../models';
+import { DateTime } from 'luxon';
 
 interface JunitTestcase {
   '@_classname': string;
@@ -43,23 +44,22 @@ export interface BuildInfo {
 
 export async function getSortedTestsData() {
   return await db.report.findAll({
-    include: [
-      {
-        model: db.build,
-      },
-    ],
+    include: db.report.associations.build,
     order: [['id', 'DESC']],
   });
 }
 
 export const getTestData = async (id) => {
   return await db.report.findByPk(id, {
+    rejectOnEmpty: true,
     include: [
       {
-        model: db.suite,
-        include: {
-          model: db.testcase,
-        },
+        association: db.report.associations.suites,
+        include: [
+          {
+            association: db.suite.associations.testcases,
+          },
+        ],
       },
     ],
   });
@@ -98,7 +98,9 @@ export const storeTestData = async (rawContent: string) => {
         errors: Number(suite['@_errors']),
         skipped: Number(suite['@_skipped']),
         time: Number(suite['@_time']),
-        timestamp: suite['@_timestamp'].replace(/T/, ' '),
+        timestamp: DateTime.fromISO(suite['@_timestamp'], {
+          zone: 'utc',
+        }).toJSDate(),
       });
       await Promise.all(
         suite.testcase.map(
