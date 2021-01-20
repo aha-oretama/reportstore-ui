@@ -1,19 +1,19 @@
-import {Association, Model, Optional, Sequelize} from "sequelize";
+import { Association, Model, Optional, Sequelize } from 'sequelize';
 
 interface ReportAttribute {
-  id: number
-  name: string,
-  tests: number,
-  failures: number,
-  errors: number,
-  time: number,
+  id: number;
+  name: string;
+  tests: number;
+  failures: number;
+  errors: number;
+  time: number;
 }
 // Some attributes are optional in `report.build` and `report.create` calls
-interface ReportCreationAttributes extends Optional<ReportAttribute, "id"> {}
+type ReportCreationAttributes = Optional<ReportAttribute, 'id'>;
 
-export class Report extends Model<ReportAttribute, ReportCreationAttributes>
+export class Report
+  extends Model<ReportAttribute, ReportCreationAttributes>
   implements ReportAttribute {
-
   public id: number;
   public name: string;
   public tests: number;
@@ -24,8 +24,8 @@ export class Report extends Model<ReportAttribute, ReportCreationAttributes>
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  public readonly suites?: Suite[]
-  public readonly build?: Build
+  public readonly suites?: Suite[];
+  public readonly build?: Build;
   public static associations: {
     suites: Association<Report, Suite>;
     build: Association<Report, Build>;
@@ -33,19 +33,21 @@ export class Report extends Model<ReportAttribute, ReportCreationAttributes>
 }
 
 interface SuiteAttribute {
-  id: number
-  report_id: number,
-  name: string,
-  tests: number,
-  failures: number,
-  errors: number,
-  skipped: number,
-  time: number,
-  timestamp: Date,
+  id: number;
+  report_id: number;
+  name: string;
+  tests: number;
+  failures: number;
+  errors: number;
+  skipped: number;
+  time: number;
+  timestamp: Date;
 }
-interface SuiteCreationAttributes extends Optional<SuiteAttribute, "id"> {}
+type SuiteCreationAttributes = Optional<SuiteAttribute, 'id'>;
 
-export class Suite extends Model<SuiteAttribute, SuiteCreationAttributes> implements SuiteAttribute {
+export class Suite
+  extends Model<SuiteAttribute, SuiteCreationAttributes>
+  implements SuiteAttribute {
   id: number;
   report_id: number;
   name: string;
@@ -59,24 +61,26 @@ export class Suite extends Model<SuiteAttribute, SuiteCreationAttributes> implem
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  public readonly testcases?: TestCase[]
+  public readonly testcases?: TestCase[];
   public static associations: {
     testcases: Association<Suite, TestCase>;
   };
 }
 
 interface TestCaseAttribute {
-  id: number,
-  suite_id: number,
-  classname: string,
-  name: string,
-  failure: string | null,
-  skipped: string | null,
-  time: number,
+  id: number;
+  suite_id: number;
+  classname: string;
+  name: string;
+  failure: string | null;
+  skipped: string | null;
+  time: number;
 }
-interface TestCaseCreationAttributes extends Optional<TestCaseAttribute, "id"> {}
+type TestCaseCreationAttributes = Optional<TestCaseAttribute, 'id'>;
 
-export class TestCase extends Model<TestCaseAttribute, TestCaseCreationAttributes> implements TestCaseAttribute {
+export class TestCase
+  extends Model<TestCaseAttribute, TestCaseCreationAttributes>
+  implements TestCaseAttribute {
   classname: string;
   failure: string | null;
   id: number;
@@ -90,18 +94,20 @@ export class TestCase extends Model<TestCaseAttribute, TestCaseCreationAttribute
 }
 
 interface BuildAttribute {
-  id: number,
-  report_id: number,
-  repository_url: string,
-  branch: string,
-  commit_hash: string,
-  tag: string,
-  pull_request_url: string,
-  build_url: string,
+  id: number;
+  report_id: number;
+  repository_url: string;
+  branch: string;
+  commit_hash: string;
+  tag: string;
+  pull_request_url: string;
+  build_url: string;
 }
-interface BuildCreationAttributes extends Optional<BuildAttribute, "id"> {}
+type BuildCreationAttributes = Optional<BuildAttribute, 'id'>;
 
-export class Build extends Model<BuildAttribute, BuildCreationAttributes> implements BuildAttribute {
+export class Build
+  extends Model<BuildAttribute, BuildCreationAttributes>
+  implements BuildAttribute {
   branch: string;
   build_url: string;
   commit_hash: string;

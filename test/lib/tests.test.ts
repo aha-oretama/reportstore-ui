@@ -7,6 +7,7 @@ import {
 import path from 'path';
 import db from '../../models';
 import fs from 'fs';
+import { DateTime } from 'luxon';
 
 const dataDir = path.join(__dirname, '..', 'data');
 let report;
@@ -66,8 +67,9 @@ describe('TestData', () => {
     expect(testData.name).toBe('jest tests');
     expect(testData.time).toBe(9.681);
     expect(testData.suites[0].name).toBe('post.test.ts');
-    // FIXME: Date is expected
-    expect(testData.suites[0].timestamp).toEqual(new Date("2020-12-31T05:19:22.000Z"));
+    expect(testData.suites[0].timestamp).toEqual(
+      DateTime.fromISO('2020-12-31T14:19:22.000Z').toJSDate()
+    );
     expect(testData.suites[0].testcases[0].name).toBe(
       'getAllPostIds should return ids'
     );
