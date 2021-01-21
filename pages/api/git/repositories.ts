@@ -8,7 +8,7 @@ export default async function repositories(
 ) {
   try {
     const {
-      query: { userId},
+      query: { userId },
     } = req;
     const idpToken = await getIdpToken(userId as string);
 

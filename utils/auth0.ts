@@ -1,14 +1,14 @@
 import { initAuth0 } from '@auth0/nextjs-auth0';
 import { AuthenticationClient, ManagementClient } from 'auth0';
-import IAuth0Settings from "@auth0/nextjs-auth0/dist/settings";
+import IAuth0Settings from '@auth0/nextjs-auth0/dist/settings';
 
 // Vercel's url doesn't include protocol
 const getBaseUrl = () => {
-  if(process.env.PUBLIC_URL.startsWith("http")) {
-    return process.env.PUBLIC_URL
+  if (process.env.PUBLIC_URL.startsWith('http')) {
+    return process.env.PUBLIC_URL;
   }
   return `https://${process.env.PUBLIC_URL}`;
-}
+};
 const baseUrl = getBaseUrl();
 
 const auth0Config: IAuth0Settings = {
