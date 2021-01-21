@@ -1,8 +1,8 @@
 import Layout from '../../components/layout';
 import Head from 'next/head';
-import utilStyles from '../../styles/utils.module.css';
 import { useTestData } from '../../hooks/useTestData';
 import { useRouter } from 'next/router';
+import React from 'react';
 
 export default function Post() {
   const router = useRouter();
@@ -17,14 +17,14 @@ export default function Post() {
       <Head>
         <title>{testData.id}</title>
       </Head>
-      <h1 className={utilStyles.headingXl}>{testData.id}</h1>
-      <h2 className={utilStyles.headingXl}>{testData.name}</h2>
-      <div className={utilStyles.lightText}>{testData.time}</div>
+      <h1>{testData.id}</h1>
+      <h2>{testData.name}</h2>
+      <div>{testData.time}</div>
       <ul>
         {testData.suites.map((suite) => (
           <li key={suite.name}>
             {suite.name}
-            <div className={utilStyles.lightText}>{suite.timestamp}</div>
+            <div>{suite.timestamp}</div>
             <br />
             tests: {suite.tests}
             <br />
@@ -40,7 +40,7 @@ export default function Post() {
               {suite.testcases.map((testcase) => (
                 <li key={testcase.name}>
                   {testcase.classname} {testcase.name}
-                  <div className={utilStyles.lightText}>{testcase.time}</div>
+                  <div>{testcase.time}</div>
                   <br />
                   {testcase.failure ? `failure ${testcase.failure}` : null}
                   {testcase.skipped ? `skipped ${testcase.skipped}` : null}
