@@ -17,6 +17,11 @@ export const Header: React.FunctionComponent = () => {
     router.push(`/mypage`);
   };
 
+  const handleSignInClick = (e: MouseEvent) => {
+    e.preventDefault();
+    router.push('/api/login');
+  };
+
   const handleSignUpClick = (e: MouseEvent) => {
     e.preventDefault();
     router.push('/api/login');
@@ -107,11 +112,12 @@ export const Header: React.FunctionComponent = () => {
               id="nav-content"
             >
               <div className="auth flex items-center w-full md:w-full">
-                <Link href="/gh">
-                  <a className="inline-block no-underline text-blue-600 hover:text-black font-medium text-lg py-2 px-4 lg:-ml-2">
-                    Sign In
-                  </a>
-                </Link>
+                <button
+                  onClick={handleSignInClick}
+                  className="bg-transparent text-gray-800  p-2 rounded border border-gray-300 mr-4 hover:bg-gray-100 hover:text-gray-700"
+                >
+                  Sign In
+                </button>
                 <button
                   onClick={handleSignUpClick}
                   className="bg-blue-600 text-gray-200  p-2 rounded  hover:bg-blue-500 hover:text-gray-100"
