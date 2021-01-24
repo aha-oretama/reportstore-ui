@@ -36,6 +36,7 @@
     "@auth0/nextjs-auth0": "^0.16.0",
     "@octokit/rest": "^18.0.12",
     "auth0": "^2.31.1",
+    "autoprefixer": "^10.2.3",
     "bent": "^7.3.12",
     "commander": "^6.2.1",
     "date-fns": "^2.16.1",
@@ -44,10 +45,12 @@
     "next": "^10.0.0",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
+    "postcss": "^8.2.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "sequelize": "^6.3.5",
-    "swr": "^0.3.11"
+    "swr": "^0.3.11",
+    "tailwindcss": "^2.0.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",

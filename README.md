@@ -1,1 +1,15 @@
-This is a starter template for [Learn Next.js](https://nextjs.org/learn).
+# testerve-ui
+
+## Develop
+
+```bash
+$ npm run docker-start:development
+$ npm run db-migrate:development
+$ npm run dev
+```
+
+## Test
+
+```bash
+$ npm run test
+```

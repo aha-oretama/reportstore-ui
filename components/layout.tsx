@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import styles from './layout.module.css';
 import Link from 'next/link';
 import React from 'react';
 import { Header } from './header';
@@ -20,7 +19,7 @@ export default function Layout({
 }) {
   return (
     <UserProvider value={{ user, loading }}>
-      <div className={styles.container}>
+      <div>
         <Head>
           <link rel="icon" href="/favicon.ico" />
           <meta
@@ -39,7 +38,7 @@ export default function Layout({
         <Header />
         <main>{children}</main>
         {!home && (
-          <div className={styles.backToHome}>
+          <div>
             <Link href="/">
               <a>← Back to home</a>
             </Link>

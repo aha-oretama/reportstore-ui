@@ -1,27 +1,13 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  line-height: 1.6;
-  font-size: 18px;
-}
+@tailwind base;
 
-* {
-  box-sizing: border-box;
-}
+/* Write your own custom base styles here */
 
-a {
-  color: #0070f3;
-  text-decoration: none;
-}
+/* Start purging... */
+@tailwind components;
+/* Stop purging. */
 
-a:hover {
-  text-decoration: underline;
-}
+/* Start purging... */
+@tailwind utilities;
+/* Stop purging. */
 
-img {
-  max-width: 100%;
-  display: block;
-}
+/* Your own custom utilities */
