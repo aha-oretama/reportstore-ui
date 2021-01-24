@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import { useUser } from '../hooks/useUser';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -7,22 +7,22 @@ export const Header: React.FunctionComponent = () => {
   const { user, loading } = useUser();
   const router = useRouter();
 
-  const handleLogoutClick = (e: MouseEvent) => {
+  const handleLogoutClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     router.push('/api/logout');
   };
 
-  const handleMyIconClick = (e: MouseEvent) => {
+  const handleMyIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     router.push(`/mypage`);
   };
 
-  const handleSignInClick = (e: MouseEvent) => {
+  const handleSignInClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     router.push('/api/login');
   };
 
-  const handleSignUpClick = (e: MouseEvent) => {
+  const handleSignUpClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     router.push('/api/login');
   };

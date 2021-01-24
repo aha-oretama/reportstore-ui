@@ -1,10 +1,13 @@
 import { getIdpToken } from '../../../utils/auth0';
 import { Octokit } from '@octokit/rest';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { Endpoints } from '@octokit/types';
+
+export type ListUserReposResponse = Endpoints['GET /user/repos']['response']['data'];
 
 export default async function repositories(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ListUserReposResponse>
 ) {
   try {
     const {
