@@ -3,7 +3,6 @@ import Layout, { siteTitle } from '../components/layout';
 import Link from 'next/link';
 import { useIds } from '../hooks/useIds';
 import { useFetchUser } from '../hooks/useUser';
-import { RepositoryList } from '../components/repository-list';
 
 export default function Home() {
   const { testsData, isError, isLoading } = useIds();
@@ -24,7 +23,6 @@ export default function Home() {
             (This is a sample website - you’ll be building a site like this on{' '}
             <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
           </p>
-          <RepositoryList user={user} />
         </section>
       ) : null}
       <section>
