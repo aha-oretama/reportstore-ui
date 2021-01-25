@@ -8,6 +8,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      repository_id: {
+        allowNull: true,
+        references: {
+          model: 'integrations',
+          key: 'repository_id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade',
+        type: Sequelize.INTEGER,
+      },
       name: {
         allowNull: false,
         type: Sequelize.STRING,

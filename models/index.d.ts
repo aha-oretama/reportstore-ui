@@ -120,6 +120,20 @@ export class Build
   public readonly updatedAt!: Date;
 }
 
+interface IntegrationAttribute {
+  key: string
+  token: string
+}
+
+export class Integration
+  extends Model<IntegrationAttribute, {}>
+  implements IntegrationAttribute {
+  repository_id: number;
+  token: string;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
 interface DBModel {
   sequelize: InstanceType<Sequelize>;
   Sequelize: typeof Sequelize;
@@ -127,6 +141,7 @@ interface DBModel {
   suite: typeof Suite;
   testcase: typeof TestCase;
   build: typeof Build;
+  integration: typeof Integration;
 }
 
 declare const db: DBModel;
