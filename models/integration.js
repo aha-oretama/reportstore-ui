@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Integration extends Model {
     /**
@@ -12,14 +10,20 @@ module.exports = (sequelize, DataTypes) => {
     // static associate(models) {
     //   Integration.hasMany(models.report);
     // }
-  };
-  Integration.init({
-    repository_id: DataTypes.INTEGER,
-    token: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'integration',
-    underscored: true,
-  });
+  }
+  Integration.init(
+    {
+      repository_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+      },
+      token: DataTypes.BLOB,
+    },
+    {
+      sequelize,
+      modelName: 'integration',
+      underscored: true,
+    }
+  );
   return Integration;
 };

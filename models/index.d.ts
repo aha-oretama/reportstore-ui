@@ -121,12 +121,12 @@ export class Build
 }
 
 interface IntegrationAttribute {
-  key: string
-  token: string
+  key: string;
+  token: string;
 }
 
 export class Integration
-  extends Model<IntegrationAttribute, {}>
+  extends Model<IntegrationAttribute, any>
   implements IntegrationAttribute {
   repository_id: number;
   token: string;

@@ -1,7 +1,9 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS pgcrypto;')
+    await queryInterface.sequelize.query(
+      'CREATE EXTENSION IF NOT EXISTS pgcrypto;'
+    );
 
     await queryInterface.createTable('integrations', {
       repository_id: {
@@ -11,20 +13,22 @@ module.exports = {
       },
       token: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.BLOB,
       },
       created_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updated_at: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface) => {
     await queryInterface.dropTable('integrations');
-    await queryInterface.sequelize.query("DROP EXTENSION IF EXISTS pgcrypto CASCADE;")
-  }
+    await queryInterface.sequelize.query(
+      'DROP EXTENSION IF EXISTS pgcrypto CASCADE;'
+    );
+  },
 };
