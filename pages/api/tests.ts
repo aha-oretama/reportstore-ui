@@ -28,8 +28,11 @@ export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
     // Related discussion, https://github.com/vercel/next.js/discussions/11634#discussioncomment-143941
     const token = req.headers['x-token'];
     const integration = await findByToken(token as string);
-    const repositoryId = integration?.repository_id;
-    const report = await storeTestData(repositoryId, req.body);
+    if(!integration) {
+      res.status(400).json({ result: 'token is needed' });
+      return;
+    }
+    const report = await storeTestData(integration.repository_id, req.body);
     await storeBuildInfo(getBuildInfo(report.id, req.headers));
     res.status(200).json({ result: 'uploaded' });
   } else {

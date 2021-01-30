@@ -123,7 +123,7 @@ export class Build
 }
 
 interface IntegrationAttribute {
-  key: string;
+  repository_id: number;
   token: string;
 }
 
@@ -134,6 +134,11 @@ export class Integration
   token: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public readonly reports?: Report[];
+  public static associations: {
+    reports: Association<Integration, Report>;
+  };
 }
 
 interface DBModel {

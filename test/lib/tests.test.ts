@@ -8,16 +8,18 @@ import path from 'path';
 import db from '../../models';
 import fs from 'fs';
 import { DateTime } from 'luxon';
+import {storeToken} from "../../lib/tokens";
 
 const dataDir = path.join(__dirname, '..', 'data');
 let report;
 let build;
 
+const getFileContent = (fileName: string) => fs.readFileSync(path.join(dataDir, fileName), 'utf8');
+const repositoryId = 111;
+
 beforeAll(async () => {
-  const getFileContent = (fileName: string) =>
-    fs.readFileSync(path.join(dataDir, fileName), 'utf8');
+  await storeToken(repositoryId);
   // To fix the order, don't use Promise.all
-  const repositoryId = 111;
   report = await storeTestData(repositoryId, getFileContent('junit-pass.xml'));
   build = await storeBuildInfo({
     reportId: report.id,
@@ -78,7 +80,7 @@ describe('TestData', () => {
 });
 
 afterAll(async () => {
-  await db.report.destroy({
+  await db.integration.destroy({
     truncate: true,
     cascade: true,
   });

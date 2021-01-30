@@ -10,11 +10,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Report.hasMany(models.suite);
       Report.hasOne(models.build);
+      // Report.belongsTo(models.integration, {foreignKey: 'repository_id', targetKey: 'repository_id'});
     }
   }
 
   Report.init(
     {
+      repository_id: DataTypes.INTEGER,
       name: DataTypes.STRING,
       tests: DataTypes.INTEGER,
       failures: DataTypes.INTEGER,
