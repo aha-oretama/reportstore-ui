@@ -2,6 +2,7 @@ import { Association, Model, Optional, Sequelize } from 'sequelize';
 
 interface ReportAttribute {
   id: number;
+  repository_id: number;
   name: string;
   tests: number;
   failures: number;
@@ -15,6 +16,7 @@ export class Report
   extends Model<ReportAttribute, ReportCreationAttributes>
   implements ReportAttribute {
   public id: number;
+  public repository_id: number;
   public name: string;
   public tests: number;
   public failures: number;

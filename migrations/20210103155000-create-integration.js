@@ -7,7 +7,7 @@ module.exports = {
 
     await queryInterface.createTable('integrations', {
       repository_id: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER,
         primaryKey: true,
       },

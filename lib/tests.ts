@@ -77,12 +77,16 @@ export const storeBuildInfo = async (build: BuildInfo) => {
   });
 };
 
-export const storeTestData = async (rawContent: string) => {
+export const storeTestData = async (
+  repositoryId: number,
+  rawContent: string
+) => {
   const content = Parser.parse(rawContent, { ignoreAttributes: false });
   const { testsuites } = formatJunitContent(content);
 
   const report = await db.report.create({
     name: testsuites['@_name'],
+    repository_id: repositoryId,
     tests: Number(testsuites['@_tests']),
     failures: Number(testsuites['@_failures']),
     errors: Number(testsuites['@_errors']),
