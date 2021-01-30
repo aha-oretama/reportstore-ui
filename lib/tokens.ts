@@ -4,14 +4,19 @@ import crypto from 'crypto';
 const encryptOption = 'compress-algo=1, cipher-algo=aes256';
 
 const getRandomKey = () => {
-  return crypto.randomBytes(64);
+  return crypto.randomBytes(32).toString('hex');
 };
 
 export const storeToken = async (repositoryId: number) => {
-  return await db.integration.create({
+  const token = getRandomKey();
+  await db.integration.create({
     repository_id: repositoryId,
-    token: db.Sequelize.fn('PGP_SYM_ENCRYPT', getRandomKey(), encryptOption),
+    token: db.Sequelize.fn('PGP_SYM_ENCRYPT', token, encryptOption),
   });
+  return {
+    token,
+    repositoryId,
+  };
 };
 
 export const findByToken = async (token: string) => {

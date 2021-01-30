@@ -1,20 +1,31 @@
 import { useRepositories } from '../hooks/git/useRepositories';
 import { UserProfile } from '../hooks/useUser';
 import React from 'react';
+import { ListUserReposResponse } from '../pages/api/git/repositories';
+import { useRouter } from 'next/router';
 
 type Props = {
   user: UserProfile;
 };
 
 export const RepositoryList: React.FunctionComponent<Props> = ({ user }) => {
-  const handleIntegrateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-  };
-
+  const router = useRouter();
   const { repositories, isLoading, isError } = useRepositories(user.sub);
 
   if (isError) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
+
+  const handleIntegrateClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    repository: ListUserReposResponse[number]
+  ) => {
+    e.preventDefault();
+    fetch('/api/integrations', {
+      method: 'post',
+      body: JSON.stringify({ repositoryId: repository.id }),
+    });
+    router.push(`/gh/${repository.id}/config`);
+  };
 
   return (
     <>
@@ -22,8 +33,8 @@ export const RepositoryList: React.FunctionComponent<Props> = ({ user }) => {
         <div className="w-full flex px-2 mt-2">
           <div className="w-full sm:w-96 inline-block relative ">
             <input
-              type=""
-              name=""
+              type="button"
+              name="search"
               className="leading-snug border border-gray-100 block w-full appearance-none bg-gray-100 text-sm text-gray-600 py-1 px-4 pl-8 rounded-lg"
               placeholder="Search"
             />
@@ -57,7 +68,7 @@ export const RepositoryList: React.FunctionComponent<Props> = ({ user }) => {
               <td className="px-4 py-4">{repository.name}</td>
               <td className="px-4 py-4">
                 <button
-                  onClick={handleIntegrateClick}
+                  onClick={(e) => handleIntegrateClick(e, repository)}
                   className="bg-blue-600 text-gray-200  p-2 rounded  hover:bg-blue-500 hover:text-gray-100"
                 >
                   Integrate
