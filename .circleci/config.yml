@@ -31,7 +31,7 @@ jobs:
             DATABASE_URL: postgres://root:$POSTGRES_PASSWORD@127.0.0.1:5432/testerve_test
       - run:
           name: upload test
-          command: node bin/cli.js -u https://testerve.vercel.app/ test-results/jest/junit.xml
+          command: node bin/cli.js -t $TESTERVE_TOKEN -u https://testerve.vercel.app/ test-results/jest/junit.xml
           when: always
       - store_test_results:
           path: test-results
