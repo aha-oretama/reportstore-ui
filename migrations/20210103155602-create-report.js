@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       repository_id: {
-        allowNull: true,
+        allowNull: false,
         references: {
           model: 'integrations',
           key: 'repository_id',
