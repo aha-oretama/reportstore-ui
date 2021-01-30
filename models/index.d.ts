@@ -2,6 +2,7 @@ import { Association, Model, Optional, Sequelize } from 'sequelize';
 
 interface ReportAttribute {
   id: number;
+  repository_id: number;
   name: string;
   tests: number;
   failures: number;
@@ -15,6 +16,7 @@ export class Report
   extends Model<ReportAttribute, ReportCreationAttributes>
   implements ReportAttribute {
   public id: number;
+  public repository_id: number;
   public name: string;
   public tests: number;
   public failures: number;
@@ -120,6 +122,20 @@ export class Build
   public readonly updatedAt!: Date;
 }
 
+interface IntegrationAttribute {
+  key: string;
+  token: string;
+}
+
+export class Integration
+  extends Model<IntegrationAttribute, any>
+  implements IntegrationAttribute {
+  repository_id: number;
+  token: string;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
 interface DBModel {
   sequelize: InstanceType<Sequelize>;
   Sequelize: typeof Sequelize;
@@ -127,6 +143,7 @@ interface DBModel {
   suite: typeof Suite;
   testcase: typeof TestCase;
   build: typeof Build;
+  integration: typeof Integration;
 }
 
 declare const db: DBModel;

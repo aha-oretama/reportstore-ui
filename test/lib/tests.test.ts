@@ -17,7 +17,8 @@ beforeAll(async () => {
   const getFileContent = (fileName: string) =>
     fs.readFileSync(path.join(dataDir, fileName), 'utf8');
   // To fix the order, don't use Promise.all
-  report = await storeTestData(getFileContent('junit-pass.xml'));
+  const repositoryId = 111;
+  report = await storeTestData(repositoryId, getFileContent('junit-pass.xml'));
   build = await storeBuildInfo({
     reportId: report.id,
     repositoryUrl: 'https://github.com/aha-oretama/testerve-ui',
@@ -25,8 +26,8 @@ beforeAll(async () => {
     commitHash: '3e39d5a0c3aa3bb6ffba1cbe8fde0858fe93b851',
     buildUrl: 'https://circleci.com/gh/aha-oretama/reportstore-ui/22',
   });
-  await storeTestData(getFileContent('junit-fail.xml'));
-  await storeTestData(getFileContent('junit-fail-skip.xml'));
+  await storeTestData(repositoryId, getFileContent('junit-fail.xml'));
+  await storeTestData(repositoryId, getFileContent('junit-fail-skip.xml'));
 });
 
 describe('Build', () => {
