@@ -19,6 +19,22 @@ export const storeToken = async (repositoryId: number) => {
   };
 };
 
+export const findByRepositoryId = async (repositoryId: number) => {
+  return await db.integration.findByPk(repositoryId, {
+    attributes: [
+      'repository_id',
+      [
+        db.Sequelize.fn(
+          'PGP_SYM_DECRYPT',
+          db.Sequelize.cast(db.Sequelize.col('token'), 'bytea'),
+          encryptOption
+        ),
+        'token',
+      ],
+    ],
+  });
+};
+
 export const findByToken = async (token: string) => {
   return await db.integration.findOne({
     where: db.Sequelize.where(
