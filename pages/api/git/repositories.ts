@@ -19,7 +19,11 @@ export default async function repositories(
       auth: idpToken,
     });
 
-    const octokitRes = await octokit.repos.listForAuthenticatedUser();
+    // https://octokit.github.io/rest.js/v18#repos-list-for-authenticated-user
+    const octokitRes = await octokit.repos.listForAuthenticatedUser({
+      visibility: 'all',
+      per_page: 100, // max
+    });
     res.status(200).json(octokitRes.data);
   } catch (error) {
     console.error(error);
