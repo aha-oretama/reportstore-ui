@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
-import { useToken } from '../../../hooks/useToken';
+import { useIntegration } from '../../../hooks/useIntegration';
 
 const Config: React.FunctionComponent = () => {
   const router = useRouter();
   const { repositoryId } = router.query;
-  const { data, isError, isLoading } = useToken(Number(repositoryId));
+  const { data, isError, isLoading } = useIntegration(Number(repositoryId));
 
   if (isError) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
