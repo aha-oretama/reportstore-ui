@@ -35,6 +35,15 @@ export const findByRepositoryId = async (repositoryId: number) => {
   });
 };
 
+export const findByRepositoryIds = async (repositoryIds: number[]) => {
+  return await db.integration.findAll({
+    attributes: ['repository_id'],
+    where: {
+      repository_id: [...repositoryIds],
+    },
+  });
+};
+
 export const findByToken = async (token: string) => {
   return await db.integration.findOne({
     where: db.Sequelize.where(

@@ -3,6 +3,7 @@ import { UserProfile } from '../hooks/useUser';
 import React from 'react';
 import { ListUserReposResponse } from '../pages/api/git/repositories';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 type Props = {
   user: UserProfile;
@@ -67,12 +68,20 @@ export const RepositoryList: React.FunctionComponent<Props> = ({ user }) => {
             >
               <td className="px-4 py-4">{repository.name}</td>
               <td className="px-4 py-4">
-                <button
-                  onClick={(e) => handleIntegrateClick(e, repository)}
-                  className="bg-blue-600 text-gray-200  p-2 rounded  hover:bg-blue-500 hover:text-gray-100"
-                >
-                  Integrate
-                </button>
+                {repository.integrated ? (
+                  <Link href={`/gh/${repository.id}`}>
+                    <a className="bg-blue-600 text-gray-200  p-2 rounded  hover:bg-blue-500 hover:text-gray-100">
+                      Go to Repo
+                    </a>
+                  </Link>
+                ) : (
+                  <button
+                    onClick={(e) => handleIntegrateClick(e, repository)}
+                    className="bg-transparent text-gray-800  p-2 rounded border border-gray-300 mr-4 hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    Integrate
+                  </button>
+                )}
               </td>
             </tr>
           ))}

@@ -1,4 +1,9 @@
-import { findByRepositoryId, findByToken, storeToken } from '../../lib/tokens';
+import {
+  findByRepositoryId,
+  findByRepositoryIds,
+  findByToken,
+  storeToken,
+} from '../../lib/tokens';
 import db from '../../models';
 import crypto from 'crypto';
 
@@ -19,6 +24,14 @@ describe('tokens', () => {
 
     const { token } = await findByRepositoryId(124);
     expect(token).toBe(mockToken);
+  });
+
+  it('can be stored and search it by repositoryIds', async () => {
+    await storeToken(125);
+    await storeToken(126);
+
+    const integrations = await findByRepositoryIds([125, 126]);
+    expect(integrations).toHaveLength(2);
   });
 });
 
