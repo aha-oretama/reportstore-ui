@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { findByRepositoryId } from '../../lib/tokens';
 
-type Await<T> = T extends Promise<infer U> ? U : T;
+export type Await<T> = T extends Promise<infer U> ? U : T;
 export type TokenResponseType = Await<ReturnType<typeof findByRepositoryId>>;
 
 export default async (
