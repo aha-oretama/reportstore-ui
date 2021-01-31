@@ -51,14 +51,14 @@ describe('Build', () => {
 
 describe('TestData', () => {
   it('getSortedTestsData returns three data, and sorted by id desc', async () => {
-    const testsData = await getSortedTestsData();
+    const testsData = await getSortedTestsData(repositoryId);
     expect(testsData).toHaveLength(3);
     expect(testsData[0].id).toBeGreaterThan(testsData[1].id);
     expect(testsData[1].id).toBeGreaterThan(testsData[2].id);
   });
 
   it('getSortedTestsData returns build information', async () => {
-    const testsData = await getSortedTestsData();
+    const testsData = await getSortedTestsData(repositoryId);
     expect(testsData[2].build).toBeDefined(); // first data should be junit-pass.xml
     expect(testsData[2].build.commit_hash).toBe(
       '3e39d5a0c3aa3bb6ffba1cbe8fde0858fe93b851'
@@ -66,7 +66,7 @@ describe('TestData', () => {
   });
 
   it('getTestData returns the report, suites, testcases', async () => {
-    const testsData = await getSortedTestsData();
+    const testsData = await getSortedTestsData(repositoryId);
     const testData = await getTestData(testsData[2].id); // first data should be junit-pass.xml
     expect(testData.name).toBe('jest tests');
     expect(testData.time).toBe(9.681);

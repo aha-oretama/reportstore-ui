@@ -43,8 +43,11 @@ export interface BuildInfo {
   buildUrl: string;
 }
 
-export async function getSortedTestsData() {
+export async function getSortedTestsData(repositoryId: number) {
   return await db.report.findAll({
+    where: {
+      repository_id: repositoryId,
+    },
     include: db.report.associations.build,
     order: [['id', 'DESC']],
   });

@@ -9,7 +9,7 @@ const Config: React.FunctionComponent = () => {
   if (isError) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
 
-  return <>{data.token}</>;
+  return <span>{data.token}</span>;
 };
 
 export default Config;
