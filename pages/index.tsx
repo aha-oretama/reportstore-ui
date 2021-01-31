@@ -1,15 +1,11 @@
 import Head from 'next/head';
 import Layout, { siteTitle } from '../components/layout';
-import Link from 'next/link';
-import { useIds } from '../hooks/useIds';
 import { useFetchUser } from '../hooks/useUser';
 
 export default function Home() {
-  const { testsData, isError, isLoading } = useIds();
   const { user, loading } = useFetchUser();
 
-  if (isError) return <div>failed to load</div>;
-  if (isLoading) return <div>loading...</div>;
+  if (loading) return <div>loading...</div>;
 
   return (
     <Layout user={user} loading={loading}>
@@ -26,33 +22,7 @@ export default function Home() {
         </section>
       ) : null}
       <section>
-        <h2>Blog</h2>
-        <ul>
-          {testsData.map(
-            ({
-              id,
-              time,
-              build: { repository_url, branch, commit_hash, build_url },
-            }) => (
-              <li key={id}>
-                <Link href={`/tests/${id}`}>
-                  <a>{id}</a>
-                </Link>
-                <br />
-                <small>{time}</small>
-                <br />
-                <a href={repository_url}>{repository_url}</a>
-                <br />
-                {branch}
-                <br />
-                {commit_hash}
-                <br />
-                {build_url}
-                <br />
-              </li>
-            )
-          )}
-        </ul>
+        <h2>Top</h2>
       </section>
     </Layout>
   );
