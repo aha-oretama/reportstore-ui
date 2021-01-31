@@ -1,6 +1,7 @@
 import Parser from 'fast-xml-parser';
 import db from '../models';
 import { DateTime } from 'luxon';
+import {Transactionable} from "sequelize";
 
 interface JunitTestcase {
   '@_classname': string;
@@ -65,7 +66,7 @@ export const getTestData = async (id) => {
   });
 };
 
-export const storeBuildInfo = async (build: BuildInfo) => {
+export const storeBuildInfo = async (build: BuildInfo, transactionable: Transactionable = {}) => {
   return await db.build.create({
     report_id: build.reportId,
     repository_url: build.repositoryUrl,
@@ -74,12 +75,13 @@ export const storeBuildInfo = async (build: BuildInfo) => {
     tag: build.tag,
     pull_request_url: build.pullRequestUrl,
     build_url: build.buildUrl,
-  });
+  }, transactionable);
 };
 
 export const storeTestData = async (
   repositoryId: number,
-  rawContent: string
+  rawContent: string,
+  transactionable: Transactionable  = {}
 ) => {
   const content = Parser.parse(rawContent, { ignoreAttributes: false });
   const { testsuites } = formatJunitContent(content);
@@ -91,7 +93,7 @@ export const storeTestData = async (
     failures: Number(testsuites['@_failures']),
     errors: Number(testsuites['@_errors']),
     time: Number(testsuites['@_time']),
-  });
+  }, transactionable);
   await Promise.all(
     testsuites.testsuite.map(async (suite) => {
       const suiteRecord = await db.suite.create({
@@ -105,7 +107,7 @@ export const storeTestData = async (
         timestamp: DateTime.fromISO(suite['@_timestamp'], {
           zone: 'utc',
         }).toJSDate(),
-      });
+      }, transactionable);
       await Promise.all(
         suite.testcase.map(
           async (test) =>
@@ -116,7 +118,7 @@ export const storeTestData = async (
               failure: test.failure,
               skipped: test.skipped,
               time: Number(test['@_time']),
-            })
+            }, transactionable)
         )
       );
     })
