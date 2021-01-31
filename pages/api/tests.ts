@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { BuildInfo, storeBuildInfo, storeTestData } from '../../lib/tests';
 import { IncomingHttpHeaders } from 'http';
 import { findByToken } from '../../lib/tokens';
-import db from "../../models";
+import db from '../../models';
 
 interface Response {
   result: string;
@@ -29,18 +29,22 @@ export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
     // Related discussion, https://github.com/vercel/next.js/discussions/11634#discussioncomment-143941
     const token = req.headers['x-token'];
     const integration = await findByToken(token as string);
-    if(!integration) {
+    if (!integration) {
       res.status(400).json({ result: 'token is needed' });
       return;
     }
 
     const transaction = await db.sequelize.transaction();
     try {
-      const report = await storeTestData(integration.repository_id, req.body, {transaction});
-      await storeBuildInfo(getBuildInfo(report.id, req.headers,), {transaction});
+      const report = await storeTestData(integration.repository_id, req.body, {
+        transaction,
+      });
+      await storeBuildInfo(getBuildInfo(report.id, req.headers), {
+        transaction,
+      });
       await transaction.commit();
       res.status(200).json({ result: 'uploaded' });
-    }catch (e) {
+    } catch (e) {
       await transaction.rollback();
       console.error(e);
       res.status(500).json({ result: 'error' });

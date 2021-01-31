@@ -8,13 +8,14 @@ import path from 'path';
 import db from '../../models';
 import fs from 'fs';
 import { DateTime } from 'luxon';
-import {storeToken} from "../../lib/tokens";
+import { storeToken } from '../../lib/tokens';
 
 const dataDir = path.join(__dirname, '..', 'data');
 let report;
 let build;
 
-const getFileContent = (fileName: string) => fs.readFileSync(path.join(dataDir, fileName), 'utf8');
+const getFileContent = (fileName: string) =>
+  fs.readFileSync(path.join(dataDir, fileName), 'utf8');
 const repositoryId = 111;
 
 beforeAll(async () => {
