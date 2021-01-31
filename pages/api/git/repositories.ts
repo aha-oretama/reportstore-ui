@@ -2,8 +2,12 @@ import { getIdpToken } from '../../../utils/auth0';
 import { Octokit } from '@octokit/rest';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Endpoints } from '@octokit/types';
+import { findByRepositoryIds } from '../../../lib/tokens';
 
-export type ListUserReposResponse = Endpoints['GET /user/repos']['response']['data'];
+type ListUserRepoResponse = Endpoints['GET /user/repos']['response']['data'][number] & {
+  integrated: boolean;
+};
+export type ListUserReposResponse = ListUserRepoResponse[];
 
 export default async function repositories(
   req: NextApiRequest,
@@ -24,7 +28,18 @@ export default async function repositories(
       visibility: 'all',
       per_page: 100, // max
     });
-    res.status(200).json(octokitRes.data);
+
+    const ids = octokitRes.data.map((repo) => repo.id);
+    const integrations = await findByRepositoryIds(ids);
+    const results = octokitRes.data.map((repo) =>
+      Object.assign({}, repo, {
+        integrated: integrations
+          .map((integrate) => integrate.repository_id)
+          .includes(repo.id),
+      })
+    );
+
+    res.status(200).json(results);
   } catch (error) {
     console.error(error);
     res.status(error.status || 500).end(error.message);

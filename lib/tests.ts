@@ -1,7 +1,7 @@
 import Parser from 'fast-xml-parser';
 import db from '../models';
 import { DateTime } from 'luxon';
-import {Transactionable} from "sequelize";
+import { Transactionable } from 'sequelize';
 
 interface JunitTestcase {
   '@_classname': string;
@@ -66,59 +66,74 @@ export const getTestData = async (id) => {
   });
 };
 
-export const storeBuildInfo = async (build: BuildInfo, transactionable: Transactionable = {}) => {
-  return await db.build.create({
-    report_id: build.reportId,
-    repository_url: build.repositoryUrl,
-    branch: build.branch,
-    commit_hash: build.commitHash,
-    tag: build.tag,
-    pull_request_url: build.pullRequestUrl,
-    build_url: build.buildUrl,
-  }, transactionable);
+export const storeBuildInfo = async (
+  build: BuildInfo,
+  transactionable: Transactionable = {}
+) => {
+  return await db.build.create(
+    {
+      report_id: build.reportId,
+      repository_url: build.repositoryUrl,
+      branch: build.branch,
+      commit_hash: build.commitHash,
+      tag: build.tag,
+      pull_request_url: build.pullRequestUrl,
+      build_url: build.buildUrl,
+    },
+    transactionable
+  );
 };
 
 export const storeTestData = async (
   repositoryId: number,
   rawContent: string,
-  transactionable: Transactionable  = {}
+  transactionable: Transactionable = {}
 ) => {
   const content = Parser.parse(rawContent, { ignoreAttributes: false });
   const { testsuites } = formatJunitContent(content);
 
-  const report = await db.report.create({
-    name: testsuites['@_name'],
-    repository_id: repositoryId,
-    tests: Number(testsuites['@_tests']),
-    failures: Number(testsuites['@_failures']),
-    errors: Number(testsuites['@_errors']),
-    time: Number(testsuites['@_time']),
-  }, transactionable);
+  const report = await db.report.create(
+    {
+      name: testsuites['@_name'],
+      repository_id: repositoryId,
+      tests: Number(testsuites['@_tests']),
+      failures: Number(testsuites['@_failures']),
+      errors: Number(testsuites['@_errors']),
+      time: Number(testsuites['@_time']),
+    },
+    transactionable
+  );
   await Promise.all(
     testsuites.testsuite.map(async (suite) => {
-      const suiteRecord = await db.suite.create({
-        report_id: report.id,
-        name: suite['@_name'],
-        tests: Number(suite['@_tests']),
-        failures: Number(suite['@_failures']),
-        errors: Number(suite['@_errors']),
-        skipped: Number(suite['@_skipped']),
-        time: Number(suite['@_time']),
-        timestamp: DateTime.fromISO(suite['@_timestamp'], {
-          zone: 'utc',
-        }).toJSDate(),
-      }, transactionable);
+      const suiteRecord = await db.suite.create(
+        {
+          report_id: report.id,
+          name: suite['@_name'],
+          tests: Number(suite['@_tests']),
+          failures: Number(suite['@_failures']),
+          errors: Number(suite['@_errors']),
+          skipped: Number(suite['@_skipped']),
+          time: Number(suite['@_time']),
+          timestamp: DateTime.fromISO(suite['@_timestamp'], {
+            zone: 'utc',
+          }).toJSDate(),
+        },
+        transactionable
+      );
       await Promise.all(
         suite.testcase.map(
           async (test) =>
-            await db.testcase.create({
-              suite_id: suiteRecord.id,
-              classname: test['@_classname'],
-              name: test['@_name'],
-              failure: test.failure,
-              skipped: test.skipped,
-              time: Number(test['@_time']),
-            }, transactionable)
+            await db.testcase.create(
+              {
+                suite_id: suiteRecord.id,
+                classname: test['@_classname'],
+                name: test['@_name'],
+                failure: test.failure,
+                skipped: test.skipped,
+                time: Number(test['@_time']),
+              },
+              transactionable
+            )
         )
       );
     })
