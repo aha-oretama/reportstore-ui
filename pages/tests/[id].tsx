@@ -1,13 +1,13 @@
 import Layout from '../../components/layout';
 import Head from 'next/head';
-import { useTestData } from '../../hooks/useTestData';
+import { useTest } from '../../hooks/useTest';
 import { useRouter } from 'next/router';
 import React from 'react';
 
 export default function Post() {
   const router = useRouter();
   const { id } = router.query;
-  const { testData, isLoading, isError } = useTestData(id as string);
+  const { testData, isLoading, isError } = useTest(id as string);
 
   if (isError) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
