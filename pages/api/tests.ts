@@ -34,7 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
       return;
     }
 
-    const transaction = db.sequelize.transaction();
+    const transaction = await db.sequelize.transaction();
     try {
       const report = await storeTestData(integration.repository_id, req.body, {transaction});
       await storeBuildInfo(getBuildInfo(report.id, req.headers,), {transaction});
