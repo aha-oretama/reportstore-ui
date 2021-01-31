@@ -16,6 +16,7 @@ let build;
 
 const getFileContent = (fileName: string) =>
   fs.readFileSync(path.join(dataDir, fileName), 'utf8');
+const notFoundRepositoryId = 110;
 const repositoryId = 111;
 
 beforeAll(async () => {
@@ -50,6 +51,11 @@ describe('Build', () => {
 });
 
 describe('TestData', () => {
+  it('getSortedTestsData return empty array when the condition does not match', async () => {
+    const testsData = await getSortedTestsData(notFoundRepositoryId);
+    expect(testsData).toHaveLength(0);
+  });
+
   it('getSortedTestsData returns three data, and sorted by id desc', async () => {
     const testsData = await getSortedTestsData(repositoryId);
     expect(testsData).toHaveLength(3);
