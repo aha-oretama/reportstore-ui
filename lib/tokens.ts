@@ -1,5 +1,6 @@
 import db from '../models';
 import crypto from 'crypto';
+import { Transactionable } from 'sequelize';
 
 const encryptOption = 'compress-algo=1, cipher-algo=aes256';
 
@@ -7,12 +8,18 @@ const getRandomKey = () => {
   return crypto.randomBytes(32).toString('hex');
 };
 
-export const storeToken = async (repositoryId: number) => {
+export const storeToken = async (
+  repositoryId: number,
+  transactionable: Transactionable = {}
+) => {
   const token = getRandomKey();
-  await db.integration.create({
-    repository_id: repositoryId,
-    token: db.Sequelize.fn('PGP_SYM_ENCRYPT', token, encryptOption),
-  });
+  await db.integration.create(
+    {
+      repository_id: repositoryId,
+      token: db.Sequelize.fn('PGP_SYM_ENCRYPT', token, encryptOption),
+    },
+    transactionable
+  );
   return {
     token,
     repositoryId,
