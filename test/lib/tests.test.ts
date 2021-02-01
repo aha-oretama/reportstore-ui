@@ -20,18 +20,37 @@ const notFoundRepositoryId = 110;
 const repositoryId = 111;
 
 beforeAll(async () => {
-  await storeToken(repositoryId);
-  // To fix the order, don't use Promise.all
-  report = await storeTestData(repositoryId, getFileContent('junit-pass.xml'));
-  build = await storeBuildInfo({
-    reportId: report.id,
-    repositoryUrl: 'https://github.com/aha-oretama/testerve-ui',
-    branch: 'main',
-    commitHash: '3e39d5a0c3aa3bb6ffba1cbe8fde0858fe93b851',
-    buildUrl: 'https://circleci.com/gh/aha-oretama/reportstore-ui/22',
-  });
-  await storeTestData(repositoryId, getFileContent('junit-fail.xml'));
-  await storeTestData(repositoryId, getFileContent('junit-fail-skip.xml'));
+  const transaction = await db.sequelize.transaction();
+  try {
+    await storeToken(repositoryId, { transaction });
+    // To fix the order, don't use Promise.all
+    report = await storeTestData(
+      repositoryId,
+      getFileContent('junit-pass.xml'),
+      { transaction }
+    );
+    build = await storeBuildInfo(
+      {
+        reportId: report.id,
+        repositoryUrl: 'https://github.com/aha-oretama/testerve-ui',
+        branch: 'main',
+        commitHash: '3e39d5a0c3aa3bb6ffba1cbe8fde0858fe93b851',
+        buildUrl: 'https://circleci.com/gh/aha-oretama/reportstore-ui/22',
+      },
+      { transaction }
+    );
+    await storeTestData(repositoryId, getFileContent('junit-fail.xml'), {
+      transaction,
+    });
+    await storeTestData(repositoryId, getFileContent('junit-fail-skip.xml'), {
+      transaction,
+    });
+
+    await transaction.commit();
+  } catch (e) {
+    await transaction.rollback();
+    console.error(e);
+  }
 });
 
 describe('Build', () => {
