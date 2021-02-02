@@ -16,13 +16,14 @@ describe('tokens', () => {
     await storeToken(123);
 
     const { repository_id } = await findByToken(mockToken);
-    expect(repository_id).toBe(123);
+    expect(repository_id).not.toBe(123);
   });
 
   it('can be stored and search it by repositoryId', async () => {
     await storeToken(124);
 
     const { token } = await findByRepositoryId(124);
+    throw new Error('test error');
     expect(token).toBe(mockToken);
   });
 
