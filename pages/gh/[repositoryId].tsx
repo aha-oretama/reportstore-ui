@@ -13,6 +13,8 @@ const GetRepositoryId: React.FunctionComponent = () => {
   const router = useRouter();
   const { repositoryId } = router.query;
 
+  if (loading) return <div>loading...</div>;
+
   const {
     repository,
     isError: isRepoError,
@@ -20,7 +22,7 @@ const GetRepositoryId: React.FunctionComponent = () => {
   } = useRepository(user?.sub, Number(repositoryId));
   const { testsData, isError, isLoading } = useTests(Number(repositoryId));
   if (isRepoError || isError) return <div>failed to load</div>;
-  if (loading || isRepoLoading || isLoading) return <div>loading...</div>;
+  if (isRepoLoading || isLoading) return <div>loading...</div>;
 
   return (
     <Layout user={user} loading={loading}>
