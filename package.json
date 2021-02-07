@@ -7,7 +7,7 @@
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write .",
     "_docker-start:test": "if test \"$CI\" != \"true\"; then docker-compose -p test -f docker/test-compose.yaml up --force-recreate -d; ./docker/bin/wait-for-postgres.sh test; fi",
-    "docker-start:development": "docker-compose -p development -f docker/dev-compose.yaml up --force-recreate -d; ./docker/bin/wait-for-postgres.sh development",
+    "predev": "docker-compose -p development -f docker/dev-compose.yaml up --force-recreate -d; ./docker/bin/wait-for-postgres.sh development",
     "db-migrate:development": "sequelize db:migrate --env development",
     "db-force-migrate:development": "db:migrate:undo:all --env development; sequelize db:migrate --env development",
     "pretest": "npm run _docker-start:test; sequelize db:migrate:undo:all --env test; sequelize db:migrate --env test",

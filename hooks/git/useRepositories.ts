@@ -1,6 +1,21 @@
 import useSWR from 'swr';
 import fetcher from '../fetcher';
-import { ListUserReposResponse } from '../../pages/api/git/repositories';
+import {
+  ListUserReposResponse,
+  RepoResponse,
+} from '../../pages/api/git/repositories';
+
+export const useRepository = (userId: string, repositoryId: number) => {
+  const { data, error } = useSWR<RepoResponse>(
+    `/api/git/repositories?userId=${userId}&repositoryId=${repositoryId}`,
+    fetcher
+  );
+  return {
+    repository: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+};
 
 export const useRepositories = (userId: string) => {
   const { data, error } = useSWR<ListUserReposResponse>(

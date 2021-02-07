@@ -1,6 +1,6 @@
-import Layout from '../../components/layout';
+import Layout from '../../../../components/layout';
 import Head from 'next/head';
-import { useTest } from '../../hooks/useTest';
+import { useTest } from '../../../../hooks/useTest';
 import { useRouter } from 'next/router';
 import React from 'react';
 
