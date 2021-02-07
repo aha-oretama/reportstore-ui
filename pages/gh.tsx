@@ -2,6 +2,7 @@ import { useFetchUser } from '../hooks/useUser';
 import Layout from '../components/layout';
 import Head from 'next/head';
 import { RepositoryList } from '../components/repository-list';
+import { Title } from '../components/atoms/title';
 
 const GitHub = () => {
   const { user, loading } = useFetchUser();
@@ -13,13 +14,8 @@ const GitHub = () => {
       <Head>
         <title>Projects - Testerve</title>
       </Head>
-      <div className="p-4">
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-          Projects
-        </h1>
-        <hr />
-        <RepositoryList user={user} />
-      </div>
+      <Title title="Projects" />
+      <RepositoryList user={user} />
     </Layout>
   );
 };

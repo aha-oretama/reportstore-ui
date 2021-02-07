@@ -30,7 +30,7 @@ export const RepositoryList: React.FunctionComponent<Props> = ({ user }) => {
 
   return (
     <>
-      <div className="bg-white pb-4 px-4 rounded-md w-full mt-8">
+      <div className="bg-white pb-4 px-4 rounded-md w-full mt-4">
         <div className="w-full flex px-2 mt-2">
           <div className="w-full sm:w-96 inline-block relative ">
             <input

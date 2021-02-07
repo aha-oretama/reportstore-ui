@@ -3,9 +3,12 @@ import Head from 'next/head';
 import { useTest } from '../../../../hooks/useTest';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { Title } from '../../../../components/atoms/title';
+import { useFetchUser } from '../../../../hooks/useUser';
 
 export default function Post() {
   const router = useRouter();
+  const { user, loading } = useFetchUser();
   const { id } = router.query;
   const { testData, isLoading, isError } = useTest(id as string);
 
@@ -13,12 +16,11 @@ export default function Post() {
   if (isLoading) return <div>loading...</div>;
 
   return (
-    <Layout>
+    <Layout user={user} loading={loading}>
       <Head>
-        <title>{testData.id}</title>
+        <title>{testData.name}</title>
       </Head>
-      <h1>{testData.id}</h1>
-      <h2>{testData.name}</h2>
+      <Title title={testData.name} />
       <div>{testData.time}</div>
       <ul>
         {testData.suites.map((suite) => (
