@@ -7,6 +7,7 @@ import Head from 'next/head';
 import { useRepository } from '../../hooks/git/useRepositories';
 import moment from 'moment';
 import Link from 'next/link';
+import { Title } from '../../components/atoms/title';
 
 const GetRepositoryId: React.FunctionComponent = () => {
   const { user, loading } = useFetchUser();
@@ -29,12 +30,7 @@ const GetRepositoryId: React.FunctionComponent = () => {
       <Head>
         <title>{`${repository.full_name} - Testerve`}</title>
       </Head>
-      <div className="p-4">
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-          {repository.full_name}
-        </h1>
-        <hr />
-      </div>
+      <Title title={repository.full_name} />
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
         <ul className="divide-y divide-gray-200">
           {testsData.map((testData) => (
