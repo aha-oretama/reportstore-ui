@@ -1,5 +1,5 @@
 import Parser from 'fast-xml-parser';
-import db from '../models';
+import db, {Build, Report} from '../models';
 import { DateTime } from 'luxon';
 import { Transactionable } from 'sequelize';
 
@@ -43,7 +43,7 @@ export interface BuildInfo {
   buildUrl: string;
 }
 
-export async function getSortedTestsData(repositoryId: number) {
+export async function getSortedTestsData(repositoryId: number): Promise<Report[]> {
   return await db.report.findAll({
     where: {
       repository_id: repositoryId,
@@ -53,7 +53,7 @@ export async function getSortedTestsData(repositoryId: number) {
   });
 }
 
-export const getTestData = async (id) => {
+export const getTestData = async (id: string): Promise<Report> => {
   return await db.report.findByPk(id, {
     rejectOnEmpty: true,
     include: [
@@ -72,7 +72,7 @@ export const getTestData = async (id) => {
 export const storeBuildInfo = async (
   build: BuildInfo,
   transactionable: Transactionable = {}
-) => {
+): Promise<Build> => {
   return await db.build.create(
     {
       report_id: build.reportId,
@@ -91,7 +91,7 @@ export const storeTestData = async (
   repositoryId: number,
   rawContent: string,
   transactionable: Transactionable = {}
-) => {
+): Promise<Report> => {
   const content = Parser.parse(rawContent, { ignoreAttributes: false });
   const { testsuites } = formatJunitContent(content);
 

@@ -3,7 +3,19 @@ import fetcher from './fetcher';
 import { GetTestsResponseType } from '../pages/api/tests';
 import { GetTestResponseType } from '../pages/api/tests/[id]';
 
-export const useTests = (repositoryId: number) => {
+interface UseTestsReturnType {
+  testsData: GetTestsResponseType,
+  isLoading: boolean,
+  isError: boolean
+}
+
+interface UseTestReturnType {
+  testData: GetTestResponseType,
+  isLoading: boolean,
+  isError: boolean
+}
+
+export const useTests = (repositoryId: number): UseTestsReturnType => {
   const { data, error } = useSWR<GetTestsResponseType>(
     `/api/tests?repositoryId=${repositoryId}`,
     fetcher
@@ -15,7 +27,7 @@ export const useTests = (repositoryId: number) => {
   };
 };
 
-export const useTest = (id: string) => {
+export const useTest = (id: string): UseTestReturnType => {
   const { data, error } = useSWR<GetTestResponseType>(
     `/api/tests/${id}`,
     fetcher
