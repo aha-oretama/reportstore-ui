@@ -43,7 +43,8 @@ const auth0Config: IAuth0Settings = {
   },
 };
 
-export default initAuth0(auth0Config);
+const auth0 = initAuth0(auth0Config);
+export default auth0;
 
 export const getIdpToken = async (userId: string) => {
   const client = await getManagementClient();
@@ -68,3 +69,20 @@ const getManagementClient = async () => {
   });
   return managementClient;
 };
+
+export async function authServerSide(req, res) {
+  // Here you can check authentication status directly before rendering the page,
+  // however the page would be a serverless function, which is more expensive and
+  // slower than a static page with client side authentication
+  const session = await auth0.getSession(req);
+
+  if (!session || !session.user) {
+    res.writeHead(302, {
+      Location: '/api/login',
+    });
+    res.end();
+    return { props: {} };
+  }
+
+  return { props: { user: session.user } };
+}
