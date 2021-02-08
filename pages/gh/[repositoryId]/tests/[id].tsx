@@ -4,11 +4,15 @@ import { useTest } from '../../../../hooks/useTest';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { Title } from '../../../../components/atoms/title';
-import { useFetchUser } from '../../../../hooks/useUser';
+import { UserProfile } from '../../../../hooks/useUser';
+import { authServerSide } from '../../../../utils/auth0';
 
-export default function Post() {
+interface Props {
+  user: UserProfile;
+}
+
+const GetTestId: React.FunctionComponent<Props> = ({ user }) => {
   const router = useRouter();
-  const { user, loading } = useFetchUser();
   const { id } = router.query;
   const { testData, isLoading, isError } = useTest(id as string);
 
@@ -16,7 +20,7 @@ export default function Post() {
   if (isLoading) return <div>loading...</div>;
 
   return (
-    <Layout user={user} loading={loading}>
+    <Layout user={user}>
       <Head>
         <title>{testData.name}</title>
       </Head>
@@ -54,4 +58,10 @@ export default function Post() {
       </ul>
     </Layout>
   );
+};
+
+export async function getServerSideProps({ req, res }) {
+  return await authServerSide(req, res);
 }
+
+export default GetTestId;

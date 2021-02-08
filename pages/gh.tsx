@@ -1,16 +1,17 @@
-import { useFetchUser } from '../hooks/useUser';
+import { UserProfile } from '../hooks/useUser';
 import Layout from '../components/layout';
 import Head from 'next/head';
 import { RepositoryList } from '../components/repository-list';
 import { Title } from '../components/atoms/title';
+import { authServerSide } from '../utils/auth0';
 
-const GitHub = () => {
-  const { user, loading } = useFetchUser();
+interface Props {
+  user: UserProfile;
+}
 
-  if (loading) return <div>loading...</div>;
-
+const GitHub: React.FunctionComponent<Props> = ({ user }) => {
   return (
-    <Layout user={user} loading={loading}>
+    <Layout user={user}>
       <Head>
         <title>Projects - Testerve</title>
       </Head>
@@ -19,5 +20,9 @@ const GitHub = () => {
     </Layout>
   );
 };
+
+export async function getServerSideProps({ req, res }) {
+  return await authServerSide(req, res);
+}
 
 export default GitHub;

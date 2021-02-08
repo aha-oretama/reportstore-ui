@@ -1,32 +1,34 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useTests } from '../../hooks/useTest';
-import { useFetchUser } from '../../hooks/useUser';
+import { UserProfile } from '../../hooks/useUser';
 import Layout from '../../components/layout';
 import Head from 'next/head';
 import { useRepository } from '../../hooks/git/useRepositories';
 import moment from 'moment';
 import Link from 'next/link';
 import { Title } from '../../components/atoms/title';
+import { authServerSide } from '../../utils/auth0';
 
-const GetRepositoryId: React.FunctionComponent = () => {
-  const { user, loading } = useFetchUser();
+interface Props {
+  user: UserProfile;
+}
+
+const GetRepositoryId: React.FunctionComponent<Props> = ({ user }) => {
   const router = useRouter();
   const { repositoryId } = router.query;
-
-  if (loading) return <div>loading...</div>;
 
   const {
     repository,
     isError: isRepoError,
     isLoading: isRepoLoading,
-  } = useRepository(user?.sub, Number(repositoryId));
+  } = useRepository(user.sub, Number(repositoryId));
   const { testsData, isError, isLoading } = useTests(Number(repositoryId));
   if (isRepoError || isError) return <div>failed to load</div>;
   if (isRepoLoading || isLoading) return <div>loading...</div>;
 
   return (
-    <Layout user={user} loading={loading}>
+    <Layout user={user}>
       <Head>
         <title>{`${repository.full_name} - Testerve`}</title>
       </Head>
@@ -112,5 +114,9 @@ const GetRepositoryId: React.FunctionComponent = () => {
     </Layout>
   );
 };
+
+export async function getServerSideProps({ req, res }) {
+  return await authServerSide(req, res);
+}
 
 export default GetRepositoryId;
