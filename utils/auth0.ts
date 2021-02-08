@@ -81,7 +81,7 @@ export async function authServerSide(req, res) {
       Location: '/api/login',
     });
     res.end();
-    return;
+    return { props: {} };
   }
 
   return { props: { user: session.user } };
