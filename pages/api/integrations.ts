@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import {NextApiHandler} from 'next';
 import { storeToken } from '../../lib/tokens';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const integrationApi: NextApiHandler = async (req, res) => {
   try {
     if (req.method === 'POST') {
       const body = JSON.parse(req.body);
@@ -9,10 +9,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const result = await storeToken(repositoryId);
       res.status(200).json(result);
     } else {
-      res.status(400).json({ result: 'not found' });
+      res.status(400).json({result: 'not found'});
     }
   } catch (error) {
     console.error(error);
     res.status(error.status || 500).end(error.message);
   }
 };
+
+export default integrationApi;

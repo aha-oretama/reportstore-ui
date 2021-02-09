@@ -6,7 +6,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default async function callback(
   req: NextApiRequest,
   res: NextApiResponse
-) {
+): Promise<void> {
   try {
     await auth0.handleCallback(req, res, { redirectTo: '/gh' });
   } catch (error) {

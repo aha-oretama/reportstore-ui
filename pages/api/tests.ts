@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import {NextApiHandler} from 'next';
 import {
   BuildInfo,
   getSortedTestsData,
@@ -12,7 +12,7 @@ import { Await } from './tokens';
 
 export type GetTestsResponseType = Await<ReturnType<typeof getSortedTestsData>>;
 
-const getBuildInfo = (reportId: number, headers: IncomingHttpHeaders) => {
+const getBuildInfo = (reportId: number, headers: IncomingHttpHeaders): BuildInfo => {
   return {
     reportId,
     repositoryUrl: headers['x-repository-url'],
@@ -24,7 +24,7 @@ const getBuildInfo = (reportId: number, headers: IncomingHttpHeaders) => {
   } as BuildInfo;
 };
 
-async function postProcess(req: NextApiRequest, res: NextApiResponse) {
+const postProcess: NextApiHandler = async (req, res) => {
   const token = req.headers['x-token'];
   const integration = await findByToken(token as string);
   if (!integration) {
@@ -49,16 +49,16 @@ async function postProcess(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-async function getProcess(
-  req: NextApiRequest,
-  res: NextApiResponse<GetTestsResponseType>
-) {
+const getProcess: NextApiHandler<GetTestsResponseType> = async (
+  req,
+  res
+) => {
   const { repositoryId } = req.query;
   const testsData = await getSortedTestsData(Number(repositoryId));
   res.status(200).json(testsData);
 }
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const testsApi: NextApiHandler = async (req, res) => {
   if (req.method === 'POST') {
     // TODO: Expected codes are https://github.com/aha-oretama/testerve-ui/blob/f64acb5219af0bba7e136ccd633917dc2139c504/pages/api/tests.ts#L10-L59
     // Using headers is workaround
@@ -72,3 +72,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(400).json({ result: 'not found' });
   }
 };
+
+export default testsApi;
