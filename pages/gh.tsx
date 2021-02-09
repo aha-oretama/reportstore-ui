@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { RepositoryList } from '../components/repository-list';
 import { Title } from '../components/atoms/title';
 import { authServerSide } from '../utils/auth0';
+import {GetServerSideProps} from "next";
 
 interface Props {
   user: UserProfile;
@@ -21,8 +22,8 @@ const GitHub: React.FunctionComponent<Props> = ({ user }) => {
   );
 };
 
-export async function getServerSideProps({ req, res }) {
-  return await authServerSide(req, res);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return await authServerSide(context);
 }
 
 export default GitHub;
