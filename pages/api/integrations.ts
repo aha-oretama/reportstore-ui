@@ -1,4 +1,4 @@
-import {NextApiHandler} from 'next';
+import { NextApiHandler } from 'next';
 import { storeToken } from '../../lib/tokens';
 
 const integrationApi: NextApiHandler = async (req, res) => {
@@ -9,7 +9,7 @@ const integrationApi: NextApiHandler = async (req, res) => {
       const result = await storeToken(repositoryId);
       res.status(200).json(result);
     } else {
-      res.status(400).json({result: 'not found'});
+      res.status(400).json({ result: 'not found' });
     }
   } catch (error) {
     console.error(error);

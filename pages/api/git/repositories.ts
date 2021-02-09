@@ -1,6 +1,6 @@
 import { getIdpToken } from '../../../utils/auth0';
 import { Octokit } from '@octokit/rest';
-import {NextApiHandler} from 'next';
+import { NextApiHandler } from 'next';
 import { Endpoints } from '@octokit/types';
 import { findByRepositoryIds } from '../../../lib/tokens';
 
@@ -32,10 +32,7 @@ async function getRepositories(
   return results;
 }
 
-const repositoriesApi: NextApiHandler = async (
-  req,
-  res
-) => {
+const repositoriesApi: NextApiHandler = async (req, res) => {
   try {
     const {
       query: { userId, repositoryId },
@@ -59,6 +56,6 @@ const repositoriesApi: NextApiHandler = async (
     console.error(error);
     res.status(error.status || 500).end(error.message);
   }
-}
+};
 
 export default repositoriesApi;

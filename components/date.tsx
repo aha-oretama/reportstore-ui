@@ -1,8 +1,8 @@
 import { format, parseISO } from 'date-fns';
-import React from "react";
+import React from 'react';
 
 interface Props {
-  dateString :string
+  dateString: string;
 }
 
 const Date: React.FunctionComponent<Props> = ({ dateString }) => {

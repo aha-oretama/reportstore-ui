@@ -4,15 +4,15 @@ import { GetTestsResponseType } from '../pages/api/tests';
 import { GetTestResponseType } from '../pages/api/tests/[id]';
 
 interface UseTestsReturnType {
-  testsData: GetTestsResponseType,
-  isLoading: boolean,
-  isError: boolean
+  testsData: GetTestsResponseType;
+  isLoading: boolean;
+  isError: boolean;
 }
 
 interface UseTestReturnType {
-  testData: GetTestResponseType,
-  isLoading: boolean,
-  isError: boolean
+  testData: GetTestResponseType;
+  isLoading: boolean;
+  isError: boolean;
 }
 
 export const useTests = (repositoryId: number): UseTestsReturnType => {

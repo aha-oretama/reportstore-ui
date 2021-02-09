@@ -6,7 +6,7 @@ import React from 'react';
 import { Title } from '../../../../components/atoms/title';
 import { UserProfile } from '../../../../hooks/useUser';
 import { authServerSide } from '../../../../utils/auth0';
-import {GetServerSideProps} from "next";
+import { GetServerSideProps } from 'next';
 
 interface Props {
   user: UserProfile;
@@ -63,6 +63,6 @@ const GetTestId: React.FunctionComponent<Props> = ({ user }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return await authServerSide(context);
-}
+};
 
 export default GetTestId;

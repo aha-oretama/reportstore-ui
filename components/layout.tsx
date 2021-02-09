@@ -2,14 +2,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import React from 'react';
 import { Header } from './header';
-import {UserProfile, UserProvider} from '../hooks/useUser';
+import { UserProfile, UserProvider } from '../hooks/useUser';
 
 export const siteTitle = 'Practice Next.js';
 
 interface Props {
-  home?: boolean,
-  user?: UserProfile | undefined,
-  loading?: boolean,
+  home?: boolean;
+  user?: UserProfile | undefined;
+  loading?: boolean;
 }
 
 const Layout: React.FunctionComponent<Props> = ({
@@ -48,6 +48,6 @@ const Layout: React.FunctionComponent<Props> = ({
       </div>
     </UserProvider>
   );
-}
+};
 
 export default Layout;

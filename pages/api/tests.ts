@@ -1,4 +1,4 @@
-import {NextApiHandler} from 'next';
+import { NextApiHandler } from 'next';
 import {
   BuildInfo,
   getSortedTestsData,
@@ -12,7 +12,10 @@ import { Await } from './tokens';
 
 export type GetTestsResponseType = Await<ReturnType<typeof getSortedTestsData>>;
 
-const getBuildInfo = (reportId: number, headers: IncomingHttpHeaders): BuildInfo => {
+const getBuildInfo = (
+  reportId: number,
+  headers: IncomingHttpHeaders
+): BuildInfo => {
   return {
     reportId,
     repositoryUrl: headers['x-repository-url'],
@@ -47,16 +50,13 @@ const postProcess: NextApiHandler = async (req, res) => {
     console.error(e);
     res.status(500).json({ result: 'error' });
   }
-}
+};
 
-const getProcess: NextApiHandler<GetTestsResponseType> = async (
-  req,
-  res
-) => {
+const getProcess: NextApiHandler<GetTestsResponseType> = async (req, res) => {
   const { repositoryId } = req.query;
   const testsData = await getSortedTestsData(Number(repositoryId));
   res.status(200).json(testsData);
-}
+};
 
 const testsApi: NextApiHandler = async (req, res) => {
   if (req.method === 'POST') {

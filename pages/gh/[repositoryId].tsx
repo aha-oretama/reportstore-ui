@@ -9,7 +9,7 @@ import moment from 'moment';
 import Link from 'next/link';
 import { Title } from '../../components/atoms/title';
 import { authServerSide } from '../../utils/auth0';
-import {GetServerSideProps} from "next";
+import { GetServerSideProps } from 'next';
 
 interface Props {
   user: UserProfile;
@@ -118,6 +118,6 @@ const GetRepositoryId: React.FunctionComponent<Props> = ({ user }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return await authServerSide(context);
-}
+};
 
 export default GetRepositoryId;

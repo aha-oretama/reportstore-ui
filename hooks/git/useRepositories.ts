@@ -6,18 +6,21 @@ import {
 } from '../../pages/api/git/repositories';
 
 interface UserRepositoryReturnType {
-  repository: RepoResponse,
-  isLoading: boolean,
-  isError: boolean
+  repository: RepoResponse;
+  isLoading: boolean;
+  isError: boolean;
 }
 
 interface UserRepositoriesReturnType {
-  repositories: ListUserReposResponse,
-  isLoading: boolean,
-  isError: boolean
+  repositories: ListUserReposResponse;
+  isLoading: boolean;
+  isError: boolean;
 }
 
-export const useRepository = (userId: string, repositoryId: number): UserRepositoryReturnType  => {
+export const useRepository = (
+  userId: string,
+  repositoryId: number
+): UserRepositoryReturnType => {
   const { data, error } = useSWR<RepoResponse>(
     `/api/git/repositories?userId=${userId}&repositoryId=${repositoryId}`,
     fetcher

@@ -1,4 +1,4 @@
-import db, {Integration} from '../models';
+import db, { Integration } from '../models';
 import crypto from 'crypto';
 import { Transactionable } from 'sequelize';
 
@@ -11,7 +11,7 @@ const getRandomKey = (): string => {
 export const storeToken = async (
   repositoryId: number,
   transactionable: Transactionable = {}
-): Promise<{ token: string, repositoryId: number }> => {
+): Promise<{ token: string; repositoryId: number }> => {
   const token = getRandomKey();
   await db.integration.create(
     {
@@ -26,9 +26,14 @@ export const storeToken = async (
   };
 };
 
-type FindByRepositoryIdReturnType = Pick<Integration, 'repository_id' | 'token'>
+type FindByRepositoryIdReturnType = Pick<
+  Integration,
+  'repository_id' | 'token'
+>;
 
-export const findByRepositoryId = async (repositoryId: number): Promise<FindByRepositoryIdReturnType> => {
+export const findByRepositoryId = async (
+  repositoryId: number
+): Promise<FindByRepositoryIdReturnType> => {
   return await db.integration.findByPk(repositoryId, {
     attributes: [
       'repository_id',
@@ -46,7 +51,9 @@ export const findByRepositoryId = async (repositoryId: number): Promise<FindByRe
 
 type FindByRepositoryIdsReturnType = Pick<Integration, 'repository_id'>;
 
-export const findByRepositoryIds = async (repositoryIds: number[]): Promise<FindByRepositoryIdsReturnType[]> => {
+export const findByRepositoryIds = async (
+  repositoryIds: number[]
+): Promise<FindByRepositoryIdsReturnType[]> => {
   return await db.integration.findAll({
     attributes: ['repository_id'],
     where: {
@@ -55,9 +62,11 @@ export const findByRepositoryIds = async (repositoryIds: number[]): Promise<Find
   });
 };
 
-type FindByTokenReturnType = Omit<Integration, 'reports'>
+type FindByTokenReturnType = Omit<Integration, 'reports'>;
 
-export const findByToken = async (token: string): Promise<FindByTokenReturnType> => {
+export const findByToken = async (
+  token: string
+): Promise<FindByTokenReturnType> => {
   return await db.integration.findOne({
     where: db.Sequelize.where(
       db.Sequelize.fn(
