@@ -1,8 +1,9 @@
 import Head from 'next/head';
 import Layout, { siteTitle } from '../components/layout';
 import { useFetchUser } from '../hooks/useUser';
+import React from 'react';
 
-export default function Home() {
+const Home: React.FunctionComponent = () => {
   const { user, loading } = useFetchUser();
 
   if (loading) return <div>loading...</div>;
@@ -26,4 +27,6 @@ export default function Home() {
       </section>
     </Layout>
   );
-}
+};
+
+export default Home;
