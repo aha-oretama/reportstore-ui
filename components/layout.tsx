@@ -2,21 +2,22 @@ import Head from 'next/head';
 import Link from 'next/link';
 import React from 'react';
 import { Header } from './header';
-import { UserProvider } from '../hooks/useUser';
+import { UserProfile, UserProvider } from '../hooks/useUser';
 
 export const siteTitle = 'Practice Next.js';
 
-export default function Layout({
+interface Props {
+  home?: boolean;
+  user?: UserProfile | undefined;
+  loading?: boolean;
+}
+
+const Layout: React.FunctionComponent<Props> = ({
   children,
   home,
   user,
   loading = false,
-}: {
-  children: React.ReactNode;
-  home?: boolean;
-  user?: any;
-  loading?: boolean;
-}) {
+}) => {
   return (
     <UserProvider value={{ user, loading }}>
       <div>
@@ -47,4 +48,6 @@ export default function Layout({
       </div>
     </UserProvider>
   );
-}
+};
+
+export default Layout;

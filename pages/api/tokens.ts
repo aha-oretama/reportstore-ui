@@ -1,14 +1,16 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { findByRepositoryId } from '../../lib/tokens';
+import { NextApiHandler } from 'next';
+import {
+  findByRepositoryId,
+  FindByRepositoryIdReturnType,
+} from '../../lib/tokens';
 
-export type Await<T> = T extends Promise<infer U> ? U : T;
-export type TokenResponseType = Await<ReturnType<typeof findByRepositoryId>>;
-
-export default async (
-  req: NextApiRequest,
-  res: NextApiResponse<TokenResponseType>
+const tokenApi: NextApiHandler<FindByRepositoryIdReturnType> = async (
+  req,
+  res
 ) => {
   const { repositoryId } = req.query;
   const result = await findByRepositoryId(Number(repositoryId));
   res.status(200).json(result);
 };
+
+export default tokenApi;

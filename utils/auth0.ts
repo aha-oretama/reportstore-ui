@@ -1,6 +1,7 @@
 import { initAuth0 } from '@auth0/nextjs-auth0';
 import { AuthenticationClient, ManagementClient } from 'auth0';
 import IAuth0Settings from '@auth0/nextjs-auth0/dist/settings';
+import { GetServerSideProps } from 'next';
 
 // Vercel's url doesn't include protocol
 const getBaseUrl = () => {
@@ -46,7 +47,7 @@ const auth0Config: IAuth0Settings = {
 const auth0 = initAuth0(auth0Config);
 export default auth0;
 
-export const getIdpToken = async (userId: string) => {
+export const getIdpToken = async (userId: string): Promise<string> => {
   const client = await getManagementClient();
   const { identities } = await client.getUser({ id: userId });
   return identities[0].access_token;
@@ -70,7 +71,7 @@ const getManagementClient = async () => {
   return managementClient;
 };
 
-export async function authServerSide(req, res) {
+export const authServerSide: GetServerSideProps = async ({ req, res }) => {
   // Here you can check authentication status directly before rendering the page,
   // however the page would be a serverless function, which is more expensive and
   // slower than a static page with client side authentication
@@ -85,4 +86,4 @@ export async function authServerSide(req, res) {
   }
 
   return { props: { user: session.user } };
-}
+};

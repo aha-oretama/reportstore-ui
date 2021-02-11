@@ -1,14 +1,22 @@
 import useSWR from 'swr';
 import fetcher from './fetcher';
-import { TokenResponseType } from '../pages/api/tokens';
+import { FindByRepositoryIdReturnType } from '../lib/tokens';
 
-export const useIntegration = (repositoryId: number) => {
-  const { data, error } = useSWR<TokenResponseType>(
+interface UseIntegrationReturnType {
+  data?: FindByRepositoryIdReturnType;
+  isLoading: boolean;
+  isError: boolean;
+}
+
+export const useIntegration = (
+  repositoryId: number
+): UseIntegrationReturnType => {
+  const { data, error } = useSWR<FindByRepositoryIdReturnType>(
     `/api/tokens?repositoryId=${repositoryId}`,
     fetcher
   );
   return {
-    data: data,
+    data,
     isLoading: !error && !data,
     isError: error,
   };
