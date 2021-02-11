@@ -4,12 +4,11 @@ import { NextApiHandler } from 'next';
 import { Endpoints } from '@octokit/types';
 import { findByRepositoryIds } from '../../../lib/tokens';
 
+export type RepoResponse = Endpoints['GET /user/repos']['response']['data'][number];
 type ListUserRepoResponse = Endpoints['GET /user/repos']['response']['data'][number] & {
   integrated: boolean;
 };
 export type ListUserReposResponse = ListUserRepoResponse[];
-
-export type RepoResponse = Endpoints['GET /user/repos']['response']['data'][number];
 
 async function getRepositories(
   octokit: Octokit

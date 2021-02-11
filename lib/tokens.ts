@@ -8,10 +8,12 @@ const getRandomKey = (): string => {
   return crypto.randomBytes(32).toString('hex');
 };
 
+type StoreTokenReturnType = { token: string; repositoryId: number };
+
 export const storeToken = async (
   repositoryId: number,
   transactionable: Transactionable = {}
-): Promise<{ token: string; repositoryId: number }> => {
+): Promise<StoreTokenReturnType> => {
   const token = getRandomKey();
   await db.integration.create(
     {
@@ -49,11 +51,11 @@ export const findByRepositoryId = async (
   });
 };
 
-type FindByRepositoryIdsReturnType = Pick<Integration, 'repository_id'>;
+type FindByRepositoryIdsReturnType = Pick<Integration, 'repository_id'>[];
 
 export const findByRepositoryIds = async (
   repositoryIds: number[]
-): Promise<FindByRepositoryIdsReturnType[]> => {
+): Promise<FindByRepositoryIdsReturnType> => {
   return await db.integration.findAll({
     attributes: ['repository_id'],
     where: {
@@ -62,11 +64,11 @@ export const findByRepositoryIds = async (
   });
 };
 
-type FindByTokenReturnType = Omit<Integration, 'reports'>;
+type FindByTokenReturnType = Omit<Integration, 'reports'> | null;
 
 export const findByToken = async (
   token: string
-): Promise<FindByTokenReturnType | null> => {
+): Promise<FindByTokenReturnType> => {
   return await db.integration.findOne({
     where: db.Sequelize.where(
       db.Sequelize.fn(
