@@ -43,9 +43,11 @@ export interface BuildInfo {
   buildUrl: string;
 }
 
+export type GetSortedTestsDataReturnType = Omit<Report, 'suites'>[];
+
 export async function getSortedTestsData(
   repositoryId: number
-): Promise<Report[]> {
+): Promise<GetSortedTestsDataReturnType> {
   return await db.report.findAll({
     where: {
       repository_id: repositoryId,
@@ -55,7 +57,11 @@ export async function getSortedTestsData(
   });
 }
 
-export const getTestData = async (id: number): Promise<Report> => {
+export type GetTestDataReturnType = Omit<Report, 'build'>;
+
+export const getTestData = async (
+  id: number
+): Promise<GetTestDataReturnType> => {
   return await db.report.findByPk(id, {
     rejectOnEmpty: true,
     include: [

@@ -26,7 +26,7 @@ export const storeToken = async (
   };
 };
 
-type FindByRepositoryIdReturnType = Pick<
+export type FindByRepositoryIdReturnType = Pick<
   Integration,
   'repository_id' | 'token'
 >;
@@ -66,7 +66,7 @@ type FindByTokenReturnType = Omit<Integration, 'reports'>;
 
 export const findByToken = async (
   token: string
-): Promise<FindByTokenReturnType> => {
+): Promise<FindByTokenReturnType | null> => {
   return await db.integration.findOne({
     where: db.Sequelize.where(
       db.Sequelize.fn(

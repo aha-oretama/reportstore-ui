@@ -2,15 +2,13 @@ import { NextApiHandler } from 'next';
 import {
   BuildInfo,
   getSortedTestsData,
+  GetSortedTestsDataReturnType,
   storeBuildInfo,
   storeTestData,
 } from '../../lib/tests';
 import { IncomingHttpHeaders } from 'http';
 import { findByToken } from '../../lib/tokens';
 import db from '../../models';
-import { Await } from './tokens';
-
-export type GetTestsResponseType = Await<ReturnType<typeof getSortedTestsData>>;
 
 const getBuildInfo = (
   reportId: number,
@@ -27,7 +25,14 @@ const getBuildInfo = (
   } as BuildInfo;
 };
 
-const postProcess: NextApiHandler = async (req, res) => {
+type PostProcessResponseType = {
+  result: string;
+};
+
+const postProcess: NextApiHandler<PostProcessResponseType> = async (
+  req,
+  res
+) => {
   const token = req.headers['x-token'];
   const integration = await findByToken(token as string);
   if (!integration) {
@@ -52,13 +57,18 @@ const postProcess: NextApiHandler = async (req, res) => {
   }
 };
 
-const getProcess: NextApiHandler<GetTestsResponseType> = async (req, res) => {
+const getProcess: NextApiHandler<GetSortedTestsDataReturnType> = async (
+  req,
+  res
+) => {
   const { repositoryId } = req.query;
   const testsData = await getSortedTestsData(Number(repositoryId));
   res.status(200).json(testsData);
 };
 
-const testsApi: NextApiHandler = async (req, res) => {
+const testsApi: NextApiHandler<
+  GetSortedTestsDataReturnType | PostProcessResponseType
+> = async (req, res) => {
   if (req.method === 'POST') {
     // TODO: Expected codes are https://github.com/aha-oretama/testerve-ui/blob/f64acb5219af0bba7e136ccd633917dc2139c504/pages/api/tests.ts#L10-L59
     // Using headers is workaround

@@ -1,10 +1,7 @@
 import { NextApiHandler } from 'next';
-import { getTestData } from '../../../lib/tests';
-import { Await } from '../tokens';
+import { getTestData, GetTestDataReturnType } from '../../../lib/tests';
 
-export type GetTestResponseType = Await<ReturnType<typeof getTestData>>;
-
-const idApi: NextApiHandler = async (req, res) => {
+const idApi: NextApiHandler<GetTestDataReturnType> = async (req, res) => {
   const {
     query: { id },
   } = req;

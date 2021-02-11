@@ -6,13 +6,13 @@ import {
 } from '../../pages/api/git/repositories';
 
 interface UserRepositoryReturnType {
-  repository: RepoResponse;
+  repository?: RepoResponse;
   isLoading: boolean;
   isError: boolean;
 }
 
 interface UserRepositoriesReturnType {
-  repositories: ListUserReposResponse;
+  repositories?: ListUserReposResponse;
   isLoading: boolean;
   isError: boolean;
 }
