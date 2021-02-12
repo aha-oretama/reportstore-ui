@@ -1,0 +1,29 @@
+name: reviewdog
+on: [pull_request]
+jobs:
+  eslint:
+    name: reviedog / eslint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: eslint
+        uses: reviewdog/action-eslint@v1
+        with:
+          reporter: github-pr-review
+  type-check:
+    name: reviedog / type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: reviewdog/action-setup@v1
+      - run: npm ci
+      - name: Typecheck
+        run: tsc --pretty false --noEmit | reviewdog -f=tsc -reporter=github-pr-review
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.github_token }}
