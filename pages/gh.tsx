@@ -2,7 +2,7 @@ import { UserProfile } from '../hooks/useUser';
 import Layout from '../components/layout';
 import Head from 'next/head';
 import { RepositoryList } from '../components/repository-list';
-import { Title } from '../components/atoms/title';
+import { Title } from '../components/molecule/title';
 import { authServerSide } from '../utils/auth0';
 import { GetServerSideProps } from 'next';
 
