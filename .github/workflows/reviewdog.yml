@@ -2,7 +2,7 @@ name: reviewdog
 on: [pull_request]
 jobs:
   eslint:
-    name: runner / eslint
+    name: reviedog / eslint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,7 +11,7 @@ jobs:
         with:
           reporter: github-pr-review
   type-check:
-    name: type-check
+    name: reviedog / type-check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
