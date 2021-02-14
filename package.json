@@ -47,6 +47,7 @@
     "pg-hstore": "^2.3.3",
     "postcss": "^8.2.4",
     "react": "16.13.1",
+    "react-accessible-accordion": "^3.3.4",
     "react-dom": "16.13.1",
     "sequelize": "^6.3.5",
     "swr": "^0.3.11",
