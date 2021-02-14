@@ -21,6 +21,9 @@ import {
   AccordionItemState,
 } from 'react-accessible-accordion';
 import { AccordionArrow } from '../../../../components/atoms/accordionArrow';
+import ReactModal from 'react-modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   user: UserProfile;
@@ -149,11 +152,19 @@ const GetTestId: React.FunctionComponent<Props> = ({ user }) => {
   const { id } = router.query;
   const { testData, isLoading, isError } = useTest(id as string);
   const [targetSuite, setSuite] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const suiteHandler = (id: number, e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setSuite(testData.suites.find((suite) => suite.id === id));
+    if (window.innerWidth <= 768) {
+      // md
+      setShowModal(true);
+    }
   };
+
+  // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
+  ReactModal.setAppElement('#__next');
 
   if (isError) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
@@ -168,9 +179,24 @@ const GetTestId: React.FunctionComponent<Props> = ({ user }) => {
         <div className="flex-shrink-0">
           <SuiteList handler={suiteHandler} suites={testData.suites} />
         </div>
-        <div className="flex-grow">
+        <div className="flex-grow invisible md:visible">
           <SuiteInfo suite={targetSuite} />
         </div>
+        {/* Scrollable in modal, https://github.com/reactjs/react-modal/issues/283#issuecomment-391430385 */}
+        <ReactModal
+          isOpen={showModal}
+          className="md:hidden overflow-y-auto max-h-screen bg-white"
+        >
+          <div className="w-4 m-4">
+            <FontAwesomeIcon
+              icon={faArrowLeft}
+              fixedWidth={true}
+              size="xs"
+              onClick={() => setShowModal(false)}
+            />
+          </div>
+          <SuiteInfo suite={targetSuite} />
+        </ReactModal>
       </div>
     </Layout>
   );
